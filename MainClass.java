@@ -23,8 +23,7 @@ public class MainClass{
 		FileWriter fw = new FileWriter("output.txt");
 		fw.write(text);
 		fw.close();
-		System.out.println(text);
-		//obj1.countWord(text);
+
 		
 	}
 
