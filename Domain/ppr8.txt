@@ -1,0 +1,760 @@
+ar
+X
+iv
+:1
+01
+0.
+01
+86
+v1
+  [
+cs
+.C
+R
+] 
+ 1
+ O
+ct
+ 2
+01
+0
+Review on the Advancements of DNA
+Cryptography
+Beenish Anam
+School of Computing
+The Bradford University
+West Yorkshire, UK
+b.anam@brad.ac.uk
+Kazi Sakib
+School of Computing
+The Bradford University
+West Yorkshire, UK
+k.muheymin-us-sakib@bradford.ac.uk
+Md. Alamgir Hossain
+School of Computing
+The Bradford University
+West Yorkshire, UK
+M.A.Hossain1@Bradford.ac.uk
+Keshav Dahal
+School of Computing
+The Bradford University
+West Yorkshire, UK
+k.p.dahal@Bradford.ac.uk
+Abstract—Since security is one of the most important issues,
+the evolvement of cryptography and cryptographic analysis
+are considered as the fields of on-going research. The latest
+development on this field is DNA cryptography. It has emerged
+after the disclosure of computational ability of Deoxyribo Nucleic
+Acid (DNA). DNA cryptography uses DNA as the computational
+tool along with several molecular techniques to manipulate it.
+Due to very high storage capacity of DNA, this field is becoming
+very promising. Currently it is in the development phase and
+it requires a lot of work and research to reach a mature stage.
+By reviewing all the potential and cutting edge technology of
+current research, this paper shows the directions that need to be
+addressed further in the field of DNA cryptography.
+I. INTRODUCTION
+DNA cryptography, a new branch of cryptography utilizes
+DNA as an informational and computational carrier with
+the aid of molecular techniques. It is relatively a new field
+which emerged after the disclosure of computational ability of
+DNA [1]. DNA cryptography gains attention due to the vast
+storage capacity of DNA, which is the basic computational
+tool of this field. One gram of DNA is known to store about
+108 tera-bytes. This surpasses the storage capacity of any
+electrical, optical or magnetic storage medium [2], [3].
+DNA is being proposed to use for many computational
+purposes. For example, Barish et. al. demonstrated a tile
+system that takes input and produces output using DNA [4].
+The method is now also used to solve many NP-complete
+and other problems. Such as Rothemund et. al. showed that
+DNA can also be used to compute XOR function which is
+an essential part of cryptosystems [5]. It is a very potential
+field of research, as work which has been done in this field
+suggests that it can put many challenges to the modern
+cryptosystems [6]. By utilizing DNA cryptography, several
+methods have been designed to break many modern algorithms
+like Data Encryption Standard (DES) [7], RSA [8], [9] and
+Number Theory Research Unit (NTRU) [10], [11].
+The research of DNA cryptosystem is still in its early
+stage. Thus, the scope of doing research on this new field
+is multi-dimensional. Work needs to be done from theory
+to realization, as both of the dimensions yet to be matured.
+Recent development showed that some key technologies in
+DNA research, such as Polymerase Chain Reaction (PCR),
+DNA synthesis, and DNA digital coding, have only been
+developed [12].
+Traditional cryptographic systems have long legacy and
+are built on a strong mathematical and theoretical basis.
+Traditional security systems like RSA, DES or NTRU are
+also found in real time operations. So, an important perception
+needs to be developed that the DNA cryptography is not to
+negate the tradition, but to create a bridge between existing and
+new technology. The power of DNA computing will strengthen
+the existing security system by opening up a new possibility
+of a hybrid cryptographic system.
+This paper gives a simple comparison between traditional
+and DNA cryptographic methods. It gives an insight to the
+benefits which can be achieved with the help of DNA cryptog-
+raphy and discusses the techniques which are currently used in
+this field. It also stresses on the need that both the traditional
+and DNA cryptographic techniques should be merged in a
+way that resulting cryptographic systems can enjoy the benefits
+from both the fields. It also points out some loop holes in this
+field and discusses that this field needs further research to gain
+the stage of realization.
+The rest of this paper is organized as follows: Section II
+gives background knowledge which is required to understand
+DNA cryptography and an insight is given to the field of
+cryptography, DNA and DNA cryptography. In this section, a
+typical cryptographic scenario is also explained, which is used
+in later sections. Section III discusses the techniques which
+are used in DNA cryptography. What has been done and what
+still needs to be done will be discussed in Section IV. Finally,
+conclusion is drawn in Section V.
+II. BACKGROUND AND RELATED WORK
+Modern cryptography uses cross disciplinary interactions
+between mathematics, computer science, and engineering. Ap-
+plications of cryptography include online banking, computer
+authetication, and e-commerce. The discussion starts with the
+most basic approach for cryptography, and then improvements
+are demonstrated.
+A. Cryptography
+Cryptography is a very significant and widely used field,
+because it is the basis of security of all information. It is a
+very old field, but in modern times due to the increased use
+of internet, the significance of this field has been multiplied.
+The whole manual systems most importantly banking, defence
+and shopping systems are now being converted into web
+applications. The precious data which is being transferred over
+the internet is vulnerable to many security attacks [13] such
+as IP spoofing, man in the middle attack, teardrop etc. To
+secure our systems and applications, we rely on the strength
+of cryptography.
+Cryptanalysis runs parallel to the cryptography. The aim of
+the cryptanalysis is to analyse and try to break the security
+systems proposed by the discipline of cryptography [14]. So
+that means, how strong a cryptographic system is, depends
+on how weak cryptanalysis is possible for that system [15].
+A great deal of work has been done on the cryptography
+and cryptanalysis. And as a result, various systems have been
+designed (for example, RSA, ECC, etc.) to achieve high level
+of security.
+B. Cryptographic Scenario
+The typical scenario in cryptography is that Alice (sender)
+wants to send some messages secretly to Bob (intended
+receiver). The message which is to be sent is in the ordinary
+language understood by all, is called a plaintext. The process
+of converting plaintext into a form which cannot be understood
+without having special information is called encryption. This
+unreadable form is called cipher text and the special knowl-
+edge is called encryption key.
+The conversion of cipher text again into plaintext with
+a special knowledge is called decryption, whereas special
+knowledge for decryption is called decryption key. Only the
+receiver has this special knowledge and only receiver can
+decrypt a cipher text with this knowledge called decryption
+key. In traditional cryptography encryption and decryption is
+done by algorithms for which currently there is no available
+solution [6].
+C. Types of Cryptography
+There are three prominent branches or sub fields of cryp-
+tography [6], named as:
+1) Modern Cryptography
+2) Quantum Cryptography
+3) DNA Cryptography.
+These three fields depend upon different difficult problems
+concerning to different disciplines for which there is no known
+solution until now. The modern cryptography is based upon the
+difficult mathematical problems such as prime factorization,
+elliptic curve problem, for which there is no known solution
+found so far. Quantum cryptography which is also relatively
+a new field, is based upon the Heisenberg uncertainty prin-
+ciple of Physics, and DNA cryptography depends upon the
+difficult biological processes concerning to the field of DNA
+technology [6] such as :
+• Polymerase Chain Reaction (PCR) for a sequence without
+knowing the correct two primer pairs [6], [12]
+Fig. 1. Structure of DNA (A - Adenine, G - Guanine, C - Cytosine and T
+- Thiamine).
+• and another is extracting information from the DNA
+chip without having the knowledge about the sequences
+present in different spots of DNA chip [16].
+A detailed explanation of these technqiues is given in
+Section 3.
+D. DNA
+Deoxyribo Nucleic Acid (DNA) is the hereditary material
+of almost entire living organisms ranging from very small
+viruses to complex human beings [17]. It is an information
+carrier of all life forms. DNA is a double helical structure
+with two strands running anti parallel as shown in Figure 1.
+DNA is a long polymer of small units called nucleotides. Each
+nucleotide consists of three components:
+1) a Nitrogenous base
+2) a five carbon sugar
+3) a Phosphate group
+There are four different nucleotides depending upon the type
+of nitrogenous base they have got. There are four different
+bases A, C, T, G called Adenine, Cytosine, Thiamine and
+Guanine respectively [18], [19].
+DNA stores all the huge and complex information about an
+organism with the combination of only these four letters A,
+C, T and G. These bases form the structure of DNA strands
+by forming hydrogen bonds with each other to keep the two
+strands intact. A forms hydrogen bond with T whereas C and G
+forms bonds with one another [20]. It can be seen in Figure 1.
+Until 1994, DNA was believed to carry only the bio-
+logical information but it was Adleman who revealed the
+computational ability of DNA when he solved NP complete
+Hamiltonian path problem of seven vertices [1]. After that
+DNA has been used as a computational tool as well [21].
+DNA computers deal with the DNA language that consists
+of four letters A, C, T and G [17], [18]. The computational
+ability of DNA is now used in cryptography as well. DNA
+cryptography is a very potential field and if manipulated in
+appropriate manner can give much harder competition to other
+fields of cryptography [22].
+E. DNA Cryptography
+Cryptography is the science that addresses all the aspects
+for secure communication over an insecure channel, namely
+TABLE I
+COMPARISON BETWEEN TRADITIONAL AND DNA CRYPTOGRAPHIC METHODS
+Security Time Complexity Storage Medium Storage Capacity Stability
+Traditional Cryptography One Fold ? few seconds Computer (Silicon) Chips 1 gram of silicon chip Dependant on
+carries 16 MB [23] implementation environments
+DNA Cryptography Two Fold ? few hours DNA strands 1 gram of DNA Dependant on
+carries 108 TB [22] environmental conditions
+privacy, confidentiality, key exchange, authentication, and non-
+repudiation. As mentioned above, DNA provides an excellent
+mean to secure data, the technique has been named as DNA
+cryptography. In such techniques, plaintext message data is
+encoded in DNA strands by the use of an alphabet of oligonu-
+cleotide sequences. Natural DNA obtained from biological
+sources may be recoded using nonstandard bases, to allow
+for subsequent processing [1], [17]. Input and output of the
+DNA data can be moved to conventional binary storage media
+by DNA chip arrays. Where binary data may be encoded in
+DNA strands by use of an alphabet of short oligonucleotide
+sequences.
+In Table I, a simple comparison is shown between traditional
+and DNA cryptographic techniques by considering attributes
+including security provided by the technique, time taken to
+process the technique, storage medium which is used to store
+the data in the technique, the storage capacity of the storage
+medium used and the stability of the results for the particular
+technique.
+By considering security provided by both the techniques,
+it can be seen that DNA cryptographic techniques provide
+two fold security by involving computational difficulties as
+well as the biological difficulties. In Traditional Cryptography
+security can be said to be one fold as it relies on only
+computational difficulties. Time taken by the efficient cryp-
+tographic algorithms is few seconds, whereas DNA crypto-
+graphic techniques that involve PCR and DNA chip technology
+can take hours to complete the whole process. Traditional
+cryptography generally runs on computers over the network,
+so the storage mediums are silicon chips of the computers,
+whereas DNA cryptography deals with the DNA strands which
+are manipulated by biological techniques. If we consider DNA
+as the storage medium, it has got huge storage capacity
+as compared to the equivalent amount of the silicon chips.
+This property of data makes DNA cryptography and DNA
+computing very tempting and beneficial field of research.
+Stability of results of cryptographic techniques refers that
+encryption and decryption always gives the same results. If the
+stability of the results of encryption and decryption provided
+is analysed, it can be seen that traditional cryptographic
+algorithms depends on the implementation conditions [24].
+Implementation conditions include the platform and the lan-
+guage limitations used to encode the algorithm. Whereas the
+stability of DNA cryptography is very much dependant on
+the environmental conditions such as temperature, pH. This
+instability of DNA cryptography is discussed later.
+III. DIFFICULT BIOLOGICAL PROBLEMS USED IN DNA
+CRYPTOGRAPHY
+DNA cryptography utilizes biological methods for encryp-
+tion and decryption. Among those, Polymerase Chain Reaction
+(PCR) [6], [12] and DNA chip technology [16] are the most
+prominent cryptographic techniques. However, steganography
+using DNA, is also found in the literature. All these techniques
+are described below.
+A. Polymerase Chain Reaction (PCR)
+PCR is an amplification and quantification process of DNA.
+The purpose of designing PCR is to increase the amount of
+DNA, as it is very difficult to deal with small amount of DNA
+strands. The name Polymerase chain reaction comes from the
+enzyme (biological catalyst) known as polymerase used in the
+technique and chain represents that this amplification process
+occurs in many cycles one after another. By performing PCR,
+short sequences of DNA can be analysed even in samples con-
+taining only minute quantities of DNA. PCR can select small
+strands of DNA and amplifies those. In practice, amplification
+of DNA involves cloning of segments of interest into vectors
+for expression. PCR is highly efficient so that untold numbers
+of copies can be made from small selected DNA. Moreover,
+PCR uses the same molecules that nature uses for copying
+DNA. To perform PCR, one should know the sequence of
+DNA to be amplified to design the right primer for it, where
+primer is a sequence containing few numbers of nucleotides
+complimentary to the specific sequence of DNA which is to
+be amplified [6]. In short, we can identify the PCR process
+into two phases:
+• Two ”primers”, short single-stranded DNA sequences to
+correspond to the beginning and ending of the DNA
+stretch.
+• Polymerase enzyme that moves along the segment of
+DNA, reading its code and assembling the copy.
+The encryption key, in this case, is compound, consisting
+of both PCR primers pair and public key. Similarly decryption
+key consists of complementary primer pairs and private key.
+Fig. 2. Summary of Cryptographic Technique using PCR
+Encryption starts with the exchange of two primers (forward
+and reverse) between Alice and Bob via a secure channel [6].
+For Encryption, pre-processing can be done, that the whole
+algorithm like RSA can be applied first. This step is numbered
+as 1 in Figure 2. Then cipher text can be converted into
+DNA sequence by coding scheme represented by number 2
+in Figure 2. By performing this, entirely different cipher text
+can be obtained [6]. In literature, cipher DNA refers the term
+cipher text which is in the form of DNA sequence, and plain
+text DNA denotes the plain text which is in the form of DNA.
+The prepared cipher DNA is then flanked by the secret
+primers and mixed with a number of other unknown DNA.
+Alice sends this DNA mixture to Bob [6]. For decryption,
+Bob can retrieve the cipher DNA by performing PCR using
+its secret primer, and reverse the whole process which is done
+for encryption [6]. Anyone without knowing the two primers
+cannot retrieve target cipher DNA [12]. Decryption steps are
+represented as 3 and 4 in Figure 2. In the same figure, number
+3 denotes that the cipher DNA can be retrieved by using DNA
+decryption key (secret primers) and is converted into cipher
+text by using coding scheme. Finally, in the figure, 4 denotes
+that the cipher text is decrypted by RSA private key.
+The above mentioned PCR technique has numerous differ-
+ent implications, such as Guangzhao Cui et. al. proposed a
+encryption scheme with the aid of PCR amplification and DNA
+coding schemes [6]. On the other hand, Tanaka et. al. devised a
+public-key system using DNA as a one-way function for key
+distribution using PCR amplification to restore the plaintext
+DNA from other distractor DNA strands [12]. Yamamoto et.
+al. also contributed in cryptography by producing large-scale
+DNA memory based on the nested PCR [25]. This technique
+of DNA cryptography provides two fold security by involving
+both the molecular techniques and modern algorithms. If
+one security level is broken some way, the other can keep
+this technique safe [6]. However, the problem of PCR based
+techniques lies in the transportation of secret keys between
+the sender and receiver. Which has been discussed in detail in
+Section IV.
+B. Steganography using DNA
+Steganography is the technique of hiding information. The
+goal of cryptography is to make data unreadable by a third
+party; on the other hand, the goal of steganography is to hide
+the data from a third party. Formula shown at equation 1 is a
+very generic description of the steganographic process:
+covermedium + hiddendata + keystego = stegomedium (1)
+In this context, the covermedium is the file in which the data,
+hiddendata, is hid. The resultant file may also be encrypted
+using another key called keystego. Finally, the stegomedium
+is the file that will be transported. Usual, medium of covering
+file may include the audio or image file. However, due to its
+massive storage capability, DNA is getting popular to be a
+steganographic covering medium.
+The primitive idea of DNA steganography can be described
+as follows. For encryption, one or more input DNA strands
+are taken to be tagged as the plaintext message. One or more
+randomly constructed secret key strands are appended with
+the input DNA. Resulting ”tagged plaintext” DNA strands
+are hidden by mixing them within many other additional
+”distracter” DNA strands which might also be constructed
+by random assembly. For decryption, given knowledge of
+the ”secret key” strands, resolution of DNA strands can be
+decrypted by a number of possible known recombinant DNA
+separation methods. Such as plaintext message strands may
+be separated out by hybridization with the complements of
+the ”secret key” strands might be placed in solid support on
+magnetic beads or on a prepared surface. These separation
+steps may combined with amplification steps.
+One such method is found in [26]. Viviana I. Risca proposed
+a steganographic technique using DNA and standard biological
+protocols. The proposed method encodes the information in
+the sequence of DNA strand, flanked by two secret primer
+target regions. The technique uses monoalphabetic encryption
+key to assign random but unique 3-base DNA codons to 40
+alpha-numeric and punctuation characters. The key was then
+used to encode plaintext messages into the base sequence of
+an artificially synthesized oligonucleotide.
+The resultant DNA strand is then hidden into a very large
+amount of similarly sized garbage DNA strands. To extract
+the message, one must know the primers that will bind the
+target regions on the message-containing DNA strand in order
+to selectively amplify the required molecule.
+Since, this primitive technique is simple and easily break-
+able, an improvement is proposed by Asish Gehani et. al [15].
+The idea is to distinguishing the probability distribution of
+plaintext source from that of distracter DNA stands [15].
+As it is discussed that DNA based steganography converts
+plaintext into plain text DNA but do not encrypt it. It only
+hides the plaintext DNA into bulk of other DNA and person
+who knows the primer for it can easily locate the plaintext
+DNA and amplify it. This technique can be very useful as it
+saves the cost of encryption, but it is vulnerable to statistical
+analysis. So the PCR based cryptography may be considered
+to be much safer [6], [22].
+C. DNA Chip Technology
+A brief introduction to DNA chip technology is given to
+clear the concept of this technique used in cryptography. Over
+less than a decade, DNA chips and microarrays have changed
+the way in which scientists carry out their investigations. DNA
+chips enable researchers to manipulate the vast amounts of
+data from genome-sequencing [27]. DNA chip technology
+is very important for the manipulation of biological data.
+It is commonly used to find expression of many genes in
+parallel [11]. These chips like silicon chips can be used to
+handle and store the data in the form of DNA sequences.
+DNA chips consist of large number of spots embedded on
+a solid surface, most commonly used is a glass slide. Each
+spot consists of different kind and number of probes, where
+probes are small nucleotide sequences which are able to bind
+to the complimentary nucleotides. Nucleotides which bind to
+these probes are fluorescently labelled, whenever any DNA
+sequence binds to these probes, it is observed under a laser
+dye and data is calculated electronically depending upon the
+ratio of the binding of probe with the DNA in each spot [28],
+[29]. Manufacturers are now developing smaller biochips with
+better information handling capabilities that will contribute
+more effectively to numerous fields of research including
+cryptography.
+Technique, considering the typical cryptographic scenario,
+has following steps:
+• Encryption key is a collection of particular probes where
+decryption key is a collection of corresponding probes
+having complimentary sequence. The decryption key is
+then sent to the Bob in a secure manner.
+• Plaintext is converted into a binary format. This binary
+format is then embedded into DNA chip as a cipher text
+(cipher DNA). Without knowing the decryption key one
+cannot read the plaintext from the DNA chip.
+• Bob uses the decryption key and hybridizes the cipher
+DNA. With the help of a computer software he can
+retrieve plain text [16].
+One such cryptosystem is XOR One-time-pad [15]. To
+construct one-time pad using DNA chip technology, an array
+of immobilized DNA strands are used, where multiple copies
+of a single sequence are grouped together in a microscopic
+pixel. The strands are optically addressable. Distinct DNA
+sequences at each optically addressable site of the array can
+be synthesised using various methods. One of the known such
+technologies is combinatorial synthesis conducted in parallel
+at thousands of locations. For preparation of oligonucleotides
+of length L, the 4L sequences are synthesized in 4n chemical
+reactions.
+To encrypt, each plaintext message has been appended with
+a unique prefix index of length L0. A complement of the plain-
+text message tag is created on one-time-pad DNA sequence
+by appending unique prefix index tag of the same length
+L0. Using annealing and ligation each of the corresponding
+pair of plaintext message and a one-time-pad sequence is
+concatenated. After that the message is encrypted by bit-wise
+XOR mechanism. XOR operation is shown in Equation 2,
+where C is the cipher data or strands, M is the plaintext
+message and S is a sequence of independently distributed
+random bits.
+Ci = Mi ? Sifor = 1, , n. (2)
+However, the fragments of the plaintext are converted to ci-
+pher strands and plaintext strands are dropped. For decryption
+commutative property of bit-wise XOR operation is used, as
+shown in Equation 4-5.
+Ci ? Si = (Mi ? Si)? Si (3)
+= Mi ? (Si ? Si) (4)
+= Mi. (5)
+MingXin et. al. used DNA chip technology in a similar
+manner as described above to design a symmetric key encryp-
+tion scheme, they referred this encryption scheme as DNA
+symmetric-key cryptosystem (DNASC) [16]. Recently Lai et.
+al. proposed an asymmetric encryption scheme using DNA
+chip technology and they also designed signatures using this
+DNA chip technology so that Alice and Bob can verify each
+other [30].
+The encryption technique using DNA chip technology is not
+restricted to encrypt only textual data, there are also encryption
+schemes which are designed to encrypt and decrypt images.
+One such cryptosystem is designed by Gehani et. al. where
+they produced a substitution one-time-pad system and used it
+during the process of encryption and decryption of 2D images.
+It is noteworthy that they also performed PCR to amplify
+particular DNA strands [15]. Similar technique is also noticed
+in Shyam et. al.’s work, where they proposed a cryptosystem
+and created plaintext and cipher text pairs using DNA chip
+technology but on images [31].
+Although DNA chip provides a wide range of parallel data
+processing capability, the lack of interoperability of DNA chip
+and other storage mediums supressed its potentiality at this
+moment.
+IV. SCOPE OF RESEARCH
+There are many advantages which seem to be associated to
+the field of DNA cryptography. The huge storage capacity of
+DNA makes it a very tempting field for research. Moreover
+the cryptographic techniques which are designed by involving
+this field are believed to give very high security level [6].
+The research which has been done so far on DNA cryptogra-
+phy shows that several DNA-based methods can be devised in
+order to break cryptosystems which are currently being used.
+Many cryptosystems used today are based on RSA public
+key encryption. RSA public key encryption is based on the
+intractability of prime factorization as there are no known
+efficient algorithms to find the prime factors of sufficiently
+large numbers. As shown in Equation 6 -
+n = p ? q (6)
+where p and q are prime numbers, for a given ”n” it is
+infeasible to find p and q when n is a very large number. If
+there is any technique that can find how to factor given ”n”,
+the whole RSA scheme will be broken. There are techniques
+which have been devised to break RSA scheme in DNA
+cryptography. These techniques used self-assembly of DNA
+tiles to fully break RSA scheme [32], [9]. If these techniques
+are able to break RSA, RSA will no more remain practical.
+Elliptic curve cryptography (ECC) has been applied in key
+exchange and also in the digital signatures. The security of
+these cryptosystems is based on the difficulty of solving the
+elliptic curve discrete logarithm problem [33]. DNA-based
+methods have been developed to break the cryptosystems
+based on elliptic curves. These methods are accomplished by
+means of basic biological operations and have developed a
+parallel multiplier; a parallel divider and a parallel adder for
+adding points on elliptic curves [34].
+The encryption schemes (Ciphers) that uses keys only once
+are said to be one-time pads (OTP). In theory OTP cipher
+is absolutely secure. But practically, key distribution and key
+generation are critical issues to be resolved for the use of OTP
+ciphers. Key space should be large enough so that keys can
+only be used once. DNA having huge storage capacity, can be
+manipulated to generate key space to be used for OTP cipher.
+There are also some areas that need to be improved. For
+example, Time and computational complexity are two of the
+most important parameters for any kind of cryptographic
+systems, DNA cryptography dealing with the manipulation
+of DNA sequences takes a lot of time to deal and work out
+with DNA sequences as compared to time taken by many very
+efficient algorithms of traditional cryptography such as, DES,
+RSA etc. [8], [9].
+There is also a risk associated to DNA cryptography that if
+the cipher DNA gets impured by unwanted DNAs, this process
+may collapse. This may be handled by taking precautions and
+maintaining the laboratory environment pure. Still research
+must be carried on to address the reliability issues.
+To summarise the whole discussion, following points are
+significant.
+1) In cryptographic technique involving PCR technology,
+it can be examined that there are two encryption keys
+and two decryption keys. One pair of encryption and
+decryption key is (n , e) pair which was used for RSA
+public key cryptosystem. The other pair was the forward
+and reverse primers used for tagging the cipher DNA.
+These primers were necessary to be securely shared
+among Alice and Bob as DNA can only be recovered
+if these primer pairs were known. This means that in
+addition to the public and private keys, primer pairs are
+also to be secretly transported. In public key encryption
+there is only one secret which is shared that is the Bob’s
+private key. However in this technique primer pairs are
+also to be secretly transported [6]. The transport of
+primers is not as simple as for the transport of keys
+of the traditional cryptographic techniques.
+Primer pairs are the sequences of nucleotides; there is
+a probability that these molecules can be affected by
+environmental conditions. To take account of this, envi-
+ronmental conditions should be maintained throughout
+the process of transport.
+Another possibility is that the sequence of primer pair
+in the form of A,C,T,G can be sent as digital form to the
+Bob, same as the manner in which keys of traditional
+cryptographic techniques are transported. Then Bob can
+synthesize his own primer pairs in the laboratory con-
+sidering the sequence which is sent to him by Alice.
+During all this process environmental conditions should
+remain stable.
+2) DNA steganography system can be the complement of
+the traditional DNA cryptography, however, potential
+limitations of DNA steganography methods is its vul-
+nerability. Certain DNA steganography systems can be
+broken, with some assumptions on information theoretic
+entropy of plaintext messages. May be the method is
+brute force, but cannot be ruled out because of the
+advancement of computing technologies. To make the
+situation better, plaintext messages can be compressed
+before encrypting, however, in this case, plaintext mes-
+sages need to be pre-processed. So the open question is
+whether DNA steganography systems with natural DNA
+plaintext input can or cannot be made to be unbreakable.
+The process of DNA steganography involves the tagging
+of plaintext DNA with the primers and is hid in other
+garbage or junk DNA of same length as the plaintext
+DNA. This is a very simple method to provide confi-
+dentiality. Same issue can arise here if the environmental
+conditions change the binding property of DNA with the
+primer. There is also a possibility that other garbage
+DNA can bind to the primer, making it difficult to
+recover the original plaintext DNA [6], [22].
+3) DNA chips contains arrays of Pico moles of DNA
+sequences, known as probes. Since an array can contain
+huge number of probes, a DNA chip can accomplish
+number of computation in parallel. However, DNA chip
+data is difficult to exchange between traditional storage
+medium, due to the lack of standardization in fabrica-
+tion, protocols, and analysis methods [35]. This problem
+is defined as interoperability problem in bioinformatics.
+Moreover by examining the DNA chip technology used
+in the DNA cryptography, it is seen that encryption
+and decryption processes are performed on DNA chip.
+DNA being a biological molecule; whose properties
+are dependent on the environmental conditions. For
+instance, DNA’s property to bind to other nucleotides
+can be changed by changing environmental conditions.
+So encryption and decryption process does not remain
+stable. Due to this instability, encryption and decryption
+may show different results under different environmental
+conditions.
+In short it can be said that DNA cryptography cannot totally
+be replaced traditional cryptography which is currently being
+used. This field requires a lot of research and work to have a
+position in which it can be implemented and used for practical
+purposes. There is a need that people from traditional cryp-
+tography and DNA technology should exchange knowledge
+among each other and cryptosystems should be devised in such
+a way that they can enjoy benefit from both the fields.
+V. CONCLUSION
+DNA cryptography is a relatively new cryptographic field of
+research evolved with the DNA computing. In this particular
+field, DNA is used as message carrier and the bio-technology
+such as PCR, is used as the implementation mechanism. The
+extravagant storage capability and parallel computability of
+DNA molecules are exploited for encryption, authentication,
+and authorization. In this paper, the existing DNA crypto-
+graphic techniques namely Polymerase Chain Reaction (PCR),
+Steganography using DNA and DNA chip technology have
+been discussed. With the summarization of the progress of
+DNA cryptographic research, the advantages, future trends and
+several problems have also been identified. All the three kinds
+of cryptography have their own advantages and disadvantages
+and can be treated as the complement of each other in future
+security applications. However, the difficulties that are identi-
+fied in DNA cryptography are the absence of theoretical basis
+and practical methodologies which can readily be implemented
+in the field of security.
+The potentiality of DNA on computing can open up further
+biological molecule based computation methods. Once the
+DNA cryptography field is developed and analysed, attempts
+can be made to convert the cipher DNA into cipher proteins
+or RNA, these can give us another level of security. It will
+be possible only by intensive research and practical work on
+DNA computing.
+ACKNOWLEDGMENT
+The Erasmus Mundus project eLINK - east-west Link for
+Innovation, Networking and Knowledge exchange programme
+(EM ECW SGA2008-4949) for funding this study.
+REFERENCES
+[1] L. Adleman, “Molecular computation of solutions to combinatorial prob-
+lems,” Science, JSTOR, vol. 266, pp. 1021–1025, 1994.
+[2] G. Cui, Y. Liu, and X. Zhang, “New direction of data storage: DNA
+molecular storage technology,” Computer Engineering and Application,
+vol. 42, no. 26, pp. 29–32, 2006.
+[3] J. Chen, “A DNA-based, biomolecular cryptography design,” in IEEE
+International Symposium on Circuits and Systems (ISCAS), 2003, pp.
+822–825.
+[4] R. Barish, P. Rothemund, and E. Winfree, “Two computational primitives
+for algorithmic self-assembly: copying and counting,” Nano Letters,
+vol. 5, no. 12, pp. 2586–2592, 2005.
+[5] P. Rothemund, N. Papadakis, and E. Winfree, “Algorithmic self-assembly
+of DNA sierpinski triangles,” PLoS Biology, vol. 2, no. 12, pp. 2041–
+2053, 2004.
+[6] G. Cui, L. Qin, Y. Wang, and X. Zhang, “An encryption scheme
+using DNA technology,” in IEEE 3rd International conference on Bio-
+Inspired Computing: Theories and Applications (BICTA08), Adelaid, SA,
+Australia, 2008, pp. 37–42.
+[7] D. Boneh, C. Dunworth, and R. Lipton, “Breaking DES using a molecular
+computer,” in In Proceedings of DIMACS workshop on DNA computing,
+1995, pp. 37–65.
+[8] D. Beaver, “Factoring: The DNA solution,” in 4th International Con-
+ferences on the Theory and Applications of Cryptology. Wollongong,
+Australia: Springer-Verlag, Nov. 1994, pp. 419–423.
+[9] Y. Brun, “Arithmetic computation in the tile assembly model: Addition
+and multiplication,” Theoritical Computer Science, Science Direct, Else-
+vier, vol. 378, no. 1, pp. 17–31, 2007.
+[10] O. Pelletier and A. Weimerskirch, “Algorithmic self-assembly of DNA
+tiles and its application to cryptanalysis,” in Proceedings of the Genetic
+and Evo- lutionary Computation Conference 2002 (GECCO02), New
+York, USA, 2002, pp. 139–146.
+[11] X. C. Zhang, “Breaking the NTRU public key cryptosystem using self-
+assembly of DNA tilings,” Chinese Journal of Computers, vol. 12, pp.
+2129–2137, 2008.
+[12] T. Kazuo, O. Akimitsu, and S. Isao, “Public-key system using DNA as
+a one-way function for key distribution,” BioSystems, Elsevier Science,
+vol. 81, no. 1, pp. 25–29, 2005.
+[13] N. Galbreath, Cryptography for Internet and Database Applications:
+Developing Secret and Public Key Techniques with Java. New York,
+USA: John Wiley and Sons, Inc., 2002.
+[14] A. Menezes, P. Oorschot, and S. Vanstone, Handbook of applied
+cryptography. CRC Press, 1996.
+[15] A. Gehani, T. LaBean, and J. Reif, DNA based cryptography. Germany:
+Aspects of Moleculer Computing, Springer-Verlag., 2004.
+[16] L. MingXin, L. XueJia, X. GuoZhen, and Q. Lei, “Symmetric-key cryp-
+tosystem with DNA technology,” Science in China Series F: Information
+Sciences, Springer Verlag, Germany, vol. 50, no. 3, pp. 324–333, 2007.
+[17] L. H. N. C. for Biomedical Communications, Handbook on Genetic
+Cells and DNA. USA: National Library of Medicine, National Institutes
+of Health, Department of Health and Human Services., 2010.
+[18] M. Zhang, L. Sabharwal, and W. Tao, “Interactive DNA sequence
+and structure design for DNA nanoapplications,” IEEE Transactions on
+Nanobioscience, vol. 3, no. 4, pp. 286–292, Dec. 2004.
+[19] J. Watson and F. Crick, “A structure for deoxyribose nucleic acid,”
+Nature, vol. 171, pp. 737–738, Apr. 1953.
+[20] X. Guozhen, L. Mingxin, Q. Lei, and L. Xuejia, “New field of cryp-
+tography: DNA cryptography,” Chinese Sience Bulletin, Springer Verlag,
+Germany, vol. 51, no. 12, pp. 1413–1420, 2006.
+[21] A. Leier, C. Richter, W. Banzhaf, and H. Rauhe, “Cryptography with
+DNA binary strands,” BioSystems, Elsevier Science, vol. 57, no. 1, pp.
+13–22, 2000.
+[22] G. Cui, L. Cuiling, L. Haobin, and L. Xiaoguang, “DNA computing and
+its application to information security field,” in IEEE Fifth International
+Conference on Natural Computation, Tianjian, China, Aug. 2009.
+[23] Farnel. (2010) Silicon storage technology - sst25vf016b-50-4i-
+s2af - 16m flash memory, spi eeprom, soic8. [Online]. Avail-
+able: http://uk.farnell.com/silicon-storage-technology/sst25vf016b-50-4i-
+s2af/16m-flash-memory-spi-eeprom-soic8/dp/1368695
+[24] A. A. Jabri, “A statistical decoding algorithm for general linear block
+codes,” in 8th IMA International Conference on Cryptography and
+Coding, Cirencester, UK, Dec. 2001, pp. 1–8.
+[25] M. Yamamoto, S. Kashiwamura, A. Ohuchi, and M. Furukawa, “Large-
+scale dna memory based on the nested pcr,” Natural Computing, an
+international journal, vol. 7, no. 3, pp. 335–346, 2008.
+[26] V. I. Risca, “DNA-based steganography,” Cryptologia, Tylor and Fran-
+cis, vol. 25, no. 1, pp. 37–49, 2001.
+[27] P. Gwynne and G. Heebner, “Technologies in DNA chips and microar-
+rays: I,” Science, vol. 4 May, p. 949, 2001.
+[28] T. Tsukahara and H. Nagasawa, “Probe-on-carriers for oligonucleotide
+microarrays (DNA chips),” Science and Technology of Advanced Materi-
+als, Elsevier Science, vol. 5, pp. 359–362, 2004.
+[29] P. Brown and D. Botstein, “Exploring the new world of the genome
+with DNA microarrays,” Nature Genetics, vol. 21, pp. 33–37, 1999.
+[30] L. XueJia, L. MingXin, Q. Lei, H. JunSong4, and F. XiWen1, “Asym-
+metric encryption and signature method with dna technology,” SCIENCE
+CHINA Information Sciences, vol. 53, pp. 506–514, 2010.
+[31] V. M. M. Shyam, N. Kiran, “A novel encryption scheme based on
+dna computing,” in 14th IEEE International Conference, Tia, India, Dec.
+2007.
+[32] Y. Brun, “Nondeterministic polynomial time factoring in the tile assem-
+bly model,” Theoritical Computer Science, Science Direct, Elsevier, vol.
+395, no. 1, pp. 3–23, Apr. 2008.
+[33] V. S. Miller, “Use of elliptic curves in cryptography,” in 5th Annual
+International Cryptology Conference (CRYPTO ’85), Santa Barbara,
+Calif, USA, Aug. 1985, pp. 417–426.
+[34] K. Li, S. Zou, and J. Xv, “Fast parallel molecular algorithms for DNA-
+based computation: Solving the elliptic curve discrete logarithm problem
+over gf(2n),” Journal of Biomedicine and Biotechnology, Hindawi., vol.
+2008, pp. 1–10, Apr. 2008.
+[35] J. Fuscoe, W. Branham, C. Melvin, V. Desai, C. Moland, T. Han, L. Shi,
+W. Tong, A. Scully, and R. Delongchamp, “Technical issues involved
+in obtaining reliable data from microarray experiments,” Regulatory
+Research Perspective, National Center for Toxicological Research, USA,
+vol. 6, no. 1, pp. 1–22, 2006.

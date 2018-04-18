@@ -1,0 +1,913 @@
+Analyse Agile Software Development Teamwork Productivity using Qualitative 
+System Dynamics Approach 
+ 
+Israt Fatema 
+Institute of Information Technology  
+University of Dhaka 
+Dhaka, Bangladesh 
+email: mph001@iit.du.ac.bd 
+Kazi Muheymin Us Sakib 
+Institute of Information Technology  
+University of Dhaka 
+Dhaka, Bangladesh 
+email: sakib@iit.du.ac.bd 
+ 
+ 
+Abstract—A highly productive team throughout an agile 
+software development process is very instrumental in achieving 
+project success. This research presents a system dynamics (SD) 
+based approach to model agile software development 
+teamwork productivity by analyzing productivity influence 
+factors. Identification of main factors influencing productivity 
+and how they impact agile teamwork are carried out through 
+interviews, survey and literature review. A study has been 
+conducted on seventeen software companies in Bangladesh. 
+From the perspective of agile team members, the four most 
+perceived factors impacting on their productivity are team 
+effectiveness, team management, motivation and customer 
+satisfaction. Lack of management support is found to be the 
+most mentioned reason for failed agile project. The findings 
+from these sources are compiled into a Causal Loop Diagram 
+(CLD) for qualitative analysis of the teamwork productivity 
+influencing factors. The resulting qualitative model is expected 
+to provide more insight into the agile teamwork dynamics and 
+establish a basis for a further quantitative modelling. Using the 
+proposed model, the project manager may find the origin of a 
+decrease in productivity, evaluate management strategies along 
+with their effects on teamwork productivity. The future step 
+will be the dynamic simulation of the teamwork productivity 
+model based on the qualitative model in this paper.  
+Keywords-agile teamwork productivity; influence factors; 
+qualitative system dynamics; team effectiveness. 
+I.  INTRODUCTION  
+The objective of any software company is to be efficient 
+and achieve maximum team productivity by being cost 
+effective and reducing development time. A highly 
+productive team is the most important factor in achieving 
+project success at different stages of an agile software 
+development. For efficient management and a better control 
+over the agile project team, it is important to understand the 
+team dynamics and effects related to agile practices that 
+influence the development team’s productivity.  
+Research has been largely carried out to identify factors 
+that contribute and influence productivity in traditional 
+software development. There are four main factors generally 
+discussed [1]: the product being developed (characterization 
+of the specific software), people (team members, 
+capabilities, experience, motivation), project (management 
+and resourcing) and processes (tools and software methods). 
+However, agile teamwork productivity is a function of 
+various controllable and uncontrollable factors [2]. The 
+relationships between some of these factors and productivity 
+may change under new software engineering practice and 
+culture [3]. The factors change over time as expectations 
+change. The software industry is also different from country 
+to country as are the resource availability, the laws which 
+govern it and the developer’s cost [4]. In addition, actual 
+productivity measurement becomes more difficult when 
+agile software developers perform knowledge-related tasks 
+(e.g., creating, storing, sorting, retrieving, applying and 
+acquiring knowledge) where the product is usually 
+intangible, rarely has single way of doing it, and it is 
+difficult to quantify [2]. Since knowledge is complex and 
+hard to evaluate, it is difficult to interpret the productivity of 
+the agile team member’s simply by source line of code 
+(SLOC) or function points produced per unit of time/cost 
+[3].  
+Despite the increasing acceptance of the agile methods, 
+insufficient research has been empirical on the effect of 
+software development productivity [5]. A better knowledge 
+of the factors and the mediators that influence agile 
+teamwork productivity could help determine where 
+management efforts would be focused to improve 
+productivity. Agile team members also should learn to 
+interpret and manage productivity factors regularly as they 
+are self-managed. The researchers have highlighted the 
+value of team learning to help organization achieving team 
+effectiveness, better ways to solve problem and increased 
+productivity.  
+Since the agile project team is the most dynamic element 
+in the software development sector, improving team 
+productivity has become a target for software companies in 
+everywhere. The aim of this study is to analyse and 
+understand the complex interdependences and underlying 
+structures at the team’s perception level, which influence 
+agile teamwork productivity over time. This paper 
+determines the major factors impacting teamwork 
+productivity in Bangladeshi software companies through a 
+survey and interviews that have been conducted with agile 
+teams to rank the most influential ones among them. The 
+major factors are to be modelled using a qualitative SD 
+approach. This conceptual model will be used to examine 
+the internal dynamics existed within the team and the 
+60Copyright (c) IARIA, 2017.     ISBN:  978-1-61208-590-6
+ICSEA 2017 : The Twelfth International Conference on Software Engineering Advances
+organizational resources that are used to support them. The 
+future contribution of this research shall provide a strategic 
+(quantitative) model that tells the project manager in 
+advance about the degree of impact these factors will have 
+on teamwork and may identify the origin of a decrease in 
+productivity. Therefore, the agile teamwork productivity 
+may be improved by implementation of management 
+strategies. The scope of this empirical findings considers the 
+Bangladeshi software companies as a case study, which can 
+in turn make the research results beneficial to these 
+companies. However, it is thought that other countries will 
+follow a similar affect to those identified here and its results 
+could be generalized by following the proposed model.  
+The remainder of this paper is organized as follows. 
+Section II includes a literature review, section III presents 
+the research method and design. Section IV describes the 
+survey results and Section V explores the structure of the 
+qualitative SD model. Section VI describes some limitations 
+of this work. Finally, Section VII describes the conclusion 
+and future work. 
+II. LITERATURE REVIEW 
+There are several studies that attempted to assess the 
+impact of some of the influencing factors on agile teamwork 
+productivity. Only Melo et.al [2] analysed the major factors 
+influencing agile teamwork productivity using the team’s 
+perception as one potential dimension to understand their 
+overall productivity. Through perceptions, they found that 
+team management is the most influencing factor on agile 
+team productivity. SD technique has been applied in 
+software engineering fields for modelling purposes, which is 
+important for the organization and the project. There are few 
+researches [6][7][8] that attempted to evaluate the impact of 
+some of the influencing factors on productivity separately 
+using SD. However, the complex inter-related structure of 
+all the major factors effecting the teamwork productivity 
+was not considered by the previous works. Abdel-Ahmed 
+[7] investigated the effect of various management policies 
+on development cycle time, quality and effort. His works 
+however adopt the waterfall method which limits their 
+applicability in recent software project and more 
+importantly, does not focus on the agile principles. 
+ In addition, evaluation of individual productivity may 
+not affect the productivity of other team members [9]. These 
+ideas provide a motivation to study teams’ productivity, not 
+individuals. A number of studies exist on teamwork in agile 
+software development on a range of topics relevant to 
+composition of team [10], task-effective norms in teams 
+[11], team member’s motivation [12], and the importance of 
+a team vision. Yet others have focused on team’s 
+communication [10], decision making [13] and self-
+management [10]. 
+Another stream of research has focused on team 
+performance in agile software development to analyse the 
+teamwork. Team performance refers to evaluation of the 
+results of the teamwork. Moe et al. used two team 
+performance models to explain teamwork in a project 
+adopting Scrum: The Salas et al. model [14] and the 
+Dickenson McIntyre model [15]. Melo et al. used the ‘Input 
+Process Output’ model to identify team productivity factors 
+in a multiple case studies. Dingsoyr et al. [16] described 
+agile software development as a sociotechnical system 
+comprised of human (socio) and technical entities. 
+Technological interventions do not increase sociotechnical 
+system effectiveness if they are not supported by social 
+(self-managing team and group) components of the system. 
+Such team interactions are one of the important parts in 
+software development. Thus, recent focus on agile software 
+development has increased interest in analysing self-
+managing agile teams and how to effectively make team 
+productive [16]. Boehm [17] reported in his productivity 
+estimation model, Constructive Cost Model (COCOMO), 
+that productivity of a software development project is 
+mostly affected by the development team and their team 
+management. Scacchi [18] also identified that poorly 
+managed or organized project’s productivity was mostly 
+lower than those projects which were well managed. 
+Throughout the literature review, it has been observed that 
+there is a lack of well-established dynamic theory about 
+agile teamwork. This study seeks to fill this gap by 
+developing an integrated model, which represents the inter-
+related structure of productivity influence factors and how 
+they impact (positively or negatively) agile teamwork’s 
+productivity. In order to do so, this study applies a system 
+dynamics approach, which can study complex system by 
+exploring underlying relationships and connections between 
+the components of a system that normally are not discovered 
+by the input-output-process type of models used in 
+organizational studies. 
+III. RESEARCH METHODOLOGY 
+The methodological approach of this research is based 
+on the system dynamics (SD), as a modelling and simulation 
+methodology enables to model complex system considering 
+all the influencing factors [19]. There are many modelling 
+techniques developed and used so far, according to the 
+modelling goal and perspective. However, system dynamics 
+modelling chosen for this research because it provides a 
+systematic method for description, exploration and analysis 
+about the dynamic behavior of complex systems [18]. SD 
+methodology has been applied by many researchers [19][20] 
+[24][25] for studying and managing complex feedback 
+system, where feedback is understood as a closed sequence 
+of causal relationships. The concept of a feedback loop 
+reveals that any actor in a system will eventually be affected 
+by its own action. 
+A number of diagramming tools are used in SD to 
+capture the structure of systems, including causal 
+scale/influence diagrams, stock and flows. Each causal link 
+is assigned a polarity, either positive or negative to represent 
+a causal relationship between two factors. It indicates how 
+the dependent variable changes when the independent 
+variable changes. The important loops are highlighted by a 
+loop identifier, which shows whether the loop is a ‘+’ 
+(reinforcing) or ‘-’ (balancing) feedback [18]. 
+61Copyright (c) IARIA, 2017.     ISBN:  978-1-61208-590-6
+ICSEA 2017 : The Twelfth International Conference on Software Engineering Advances
+A. Identification of different factors affecting agile 
+teamwork productivity 
+Data collection: The model developed for this work is 
+based on data collected from the software companies in 
+Bangladesh. There are three important objectives of 
+collecting information; to determine what factors affected 
+productivity of agile team members, to determine how these 
+factors impacting project productivity in the team’s 
+perception and to determine the significance of the factors. 
+Identification of the factors was initially carried out through 
+an intensive literature review. A set of semi-structured 
+interviews and face-to-face discussions were also conducted 
+with twelve key project members from four software 
+companies including project managers, scrum masters, 
+developers, project owners, and considering also different 
+experience profiles.  
+Using the factors identified in this first step, a 
+questionnaire [26] was developed. In an attempt to identify 
+the perceived influencing factors and their impact on agile 
+team members, the survey questionnaire was distributed to a 
+total of seventeen software companies in Bangladesh. The 
+company selection criteria for this preliminary study were: 
+companies using agile methods for at least 1 year, 
+developing software for both offshore and local market, and 
+top listed companies in Bangladesh. 
+Data were collected throughout a period of three months 
+in 2017 (January-March). In order to ensure the quality of 
+data, team members were all self-selected by their 
+organization based on their work roles as members of 
+existing agile teams. Therefore, participants responded to 
+survey questionnaires were already aware of agile team 
+environment and mostly experienced. The filled-in 
+questionnaires were then analysed to identify factors, which 
+have major influences on agile teamwork productivity. 
+Currently, more software companies are being requested to 
+participate in this survey, as the plan is to collect more than 
+100 responses from different agile teams. 
+B. Selection of factors for inclusion in the model 
+Data analysis: Factors affecting agile teamwork 
+productivity are rarely independent of the others, but a set of 
+factors interacting with each other to build the final result 
+[7]. The important factors identified in literature and 
+interviews were taken as a starting point for the system 
+approach in this research. In total, 38 factors were chosen 
+for analysis even though not all of them are presented in this 
+paper. In order to create a system model to analyse the 
+teamwork productivity, it is required to determine the 
+importance of the individual factors, their correlation with 
+one another and their effects on productivity itself. The agile 
+team members were asked to fill in the questionnaire to 
+indicate the strength (high, medium or low) of the factors 
+that they perceived influenced their productivity [25]. 
+The procedure followed to extract the agile team 
+member’s perception of the influence factors affecting their 
+productivity can be summarized in the following steps: 
+1. Convert the qualitative scale to a quantitative one. 
+The qualitative scale of high, medium or low was converted 
+to a number scale of 3, 2, and 1, respectively. 
+TABLE I.  ARITHMETIC MEAN OF QUESTIONNAIRE RESULTS FROM 
+FREQUENCY ANALYSIS 
+ 
+SL 
+ 
+Factor 
+Me-
+an 
+ 
+SL 
+ 
+Factor 
+Me-
+an 
+1 Culture 2.23 20 What is the 
+staff turnover 
+rate in the 
+project 
+1.82 
+2 Staffing 2.76 21 Reuse  2.17 
+3 Size of team  2.29 22 What is the 
+software 
+reuse level in 
+the project 
+2.00 
+4 Project 
+complexity 
+2.23 23 Goals 2.29 
+5 Team 
+Leadership  
+2.52  
+24 
+Intra group 
+wage 
+inequality  
+1.94 
+6 Mutual 
+performance 
+monitoring  
+2.41 25 Team 
+measurement 
+2.17 
+7 Backup 
+Behaviour  
+2.41 26 Self-
+management  
+2.17 
+8 Team 
+orientation  
+2.52 27 Task variety 
+and 
+Innovation  
+2.41 
+9 Adaptability 2.35 28 External 
+Dependencies  
+2.17 
+10 Feedback 2.70 29 Tools usage 2.29 
+11 Mutual trust  2.76 30 Programming 
+language 
+2.05 
+12 Coordination 2.70 31 Schedule 
+pressure 
+2.29 
+13 Communication 2.82 32 Impact of Pair 
+programming 
+on 
+productivity 
+2.11 
+14 Staff are 
+appreciated for 
+working long 
+hours 
+1.76 33 Resource 
+constraints  
+2.41 
+15 Staff are 
+rewarded (then 
+or later) for 
+working long 
+hours 
+2.11 34 Project 
+Management  
+2.58 
+16 Adequate 
+technical 
+training for 
+team 
+2.41 35 Motivation 2.58 
+17 Adequate team 
+skills training 
+for team  
+2.35 36 External 
+project factors  
+2.41 
+18 Team member 
+turnover 
+1.64 37 Dealing with 
+cultural 
+differences 
+among 
+offshore 
+organizations 
+2.17 
+19 Key personnel 
+stayed 
+throughout the 
+project 
+2.23 38 Working 
+environment  
+2.35 
+2. Find the total score of each factor for frequency 
+analysis. Then, the arithmetic mean of the total counts was 
+calculated to eliminate the factors below the average (Table. 
+1) mean. 
+62Copyright (c) IARIA, 2017.     ISBN:  978-1-61208-590-6
+ICSEA 2017 : The Twelfth International Conference on Software Engineering Advances
+IV. SURVEY RESULTS 
+Characteristics of the sample software companies can be 
+found in Table II. Fig. 1 presents the agile practices adopted 
+by the participating software companies and it shows daily 
+stand up meeting mostly used by all of them. Fig. 2 shows 
+that lack of management support (e.g., resource constraint, 
+team design choice and motivation) is the main reason for 
+failure in agile projects.    
+In most of the interviews, the team members could not 
+define productivity as their performance measurement. Most 
+of them mentioned that team management has their own 
+ways of measuring productivity. Although at the end of the 
+project, the management assessed their productivity on the 
+basis of timeliness and quantity. At the same time, ten 
+interviewees and survey respondents (Fig. 3) also mentioned 
+customer satisfaction as a criterion for measuring or 
+perceiving productivity. Customer satisfaction is very 
+important to software development companies in 
+Bangladesh as a rising market for outsourced software 
+destination. According the product owner interview, dealing 
+with cultural differences among offshore organisation 
+influences teamwork productivity. Two main reasons behind 
+this are time and culture differences.  
+TABLE II.  CHARACTERISTICS OF PARTICIPATING SOFTWARE COMPANIES 
+Characteristic Category Number % 
+Main team 
+assignment 
+Development 
+project 
+10 58.82 
+ Maintenance 
+project 
+7 41.17 
+Team role Project manager 4 23.52 
+ Developer 6 35.29 
+ Software 
+engineer 
+3 17.65 
+ Team lead 2 11.77 
+ Quality 
+assurance 
+engineer 
+2 11.77 
+Experience in 
+agile practice 
+1-2 years 8 47.8 
+ 2-5 years 7 41.2 
+ More than 5 
+years 
+2 11.8 
+Development 
+method 
+Scrum 17 100 
+Size of the 
+company 
+(person) 
+30-50 
+50-100 
+100-150 
+150-200 
+200-250 
+250-300 
+More than 300 
+2 
+1 
+5 
+6 
+1 
+1 
+1 
+12 
+6 
+29 
+35 
+6 
+6 
+6 
+ 
+ 
+Figure 1.       Agile practices adopted in software companies 
+ 
+Figure 2.  Main reasons for failure in agile projects 
+ 
+Figure 3.  Criterion for measuring or perceiving productivity 
+ 
+Figure 4.  Agile team perceived productivity influence factors
+63Copyright (c) IARIA, 2017.     ISBN:  978-1-61208-590-6
+ICSEA 2017 : The Twelfth International Conference on Software Engineering Advances
+Sometimes it becomes difficult to keep contact with the 
+offshore client on urgent issues due to time difference 
+between places. Moreover, offshore client’s expectations are 
+different, both in terms of their general culture and their 
+views on life and work. Project developed within western 
+cultures are different from eastern cultures. For example, 
+daily traffic condition consumes most of the working time 
+in Bangladesh, which makes the developers less motivated. 
+Since, staff are not rewarded enough for working long 
+hours. However, schedule pressure can be easily dealt with 
+overtime working because it costs less in Bangladesh. 
+Five interviewees (project leads and managers) also 
+mentioned that culture is a big barrier for working in an 
+agile team. This factor affects communication between team 
+members. In addition, sometimes language barrier hinders 
+communication. Transitioning from individual work to self-
+management team requires a reorientation not only by 
+developers but also by management. This changeover takes 
+time and resources. For this reason, these project managers 
+prefer freshers as a team member. Their software companies 
+like to groom up with training than changing mind set up of 
+the team members. Besides that, self-management and 
+adaptability are considered key for agile development. But 
+these two factors have less influence (Table. 1) on agile 
+teamwork productivity and mostly depends on competent 
+project management. 
+Fig. 4 provides highlights of the most influencing 
+productivity factors that are perceived by the agile team 
+members. This study results show that agile teamwork is 
+highly dependent on team effectiveness. Project manager is 
+usually a technical lead and many management decisions 
+are made by the top management since the majority of the 
+projects are outsourced projects. Their offshore clients’ 
+satisfaction (external factors dependency) is very important 
+to them.  Team leadership and team orientation are very 
+important for teamwork motivation. The factors impacting 
+on agile teamwork productivity mentioned by the team 
+members suggested that feedback, team orientation, 
+communication, coordination and mutual trust improve team 
+effectiveness. Eventually, this will enable team to learn how 
+to effectively manage relation within team in order to 
+become more productive. 
+V.  QUALITATIVE MODELLING OF AGILE SOFTWARE   
+         DEVELOPMENT TEAMWORK PRODUCTIVITY  
+Each factor that affects agile teamwork productivity is 
+itself affected by other factors [9]. Some factors may be the 
+result of the same cause [19].  Fig. 5 presents the overall 
+conceptual model of agile teamwork productivity. It shows 
+all the influence factor’s affect found in this study. It can be 
+seen in Fig. 5 that the arrows between every two variables 
+differ in sign (positive or negative) to express direct or 
+indirect cause-effect relationships between the two variables 
+they connect.   
+Distinct from previous studies [7][24] this model 
+represents the team dynamics which is a collection of “soft 
+factors” [23] and effects related to agile methods that 
+influence the teamwork’s productivity. The soft factors that 
+can affect the software development teamwork productivity 
+include motivation, team management efficiency, customer 
+satisfaction, skillfulness and team effectiveness 
+(communication, coordination, adaptability, feedback, 
+leadership, team orientation, mutual trust, monitoring, 
+backup-behavior, self-management). Teams require a 
+complex mixture of factors that include organizational 
+support, individual skills and also teamwork skills [10] to 
+work effectively. This study also found these are the most 
+influential productivity factors from the agile team’s 
+perspective. Within the model (see Fig. 5), it is shown that 
+team effectiveness is influenced by team management, 
+motivation, team design, skillfulness, resource constraint, 
+communication and coordination. Team effectiveness can be 
+improved by team learning processes which include 
+activities such as feedback, mutual performance monitoring 
+and back-up behavior. These learning activities are likely to 
+create a positive change and to influence the productivity. 
+On the other hand, motivation influenced by team 
+management, reward, goal, salary, working environment, 
+morale and external factor (customer satisfaction).  
+Fig. 5 illustrates that motivation is positively related to 
+team effectiveness. A motivated team is much more likely 
+to be involved with the learning oriented activities to 
+develop better interpersonal relations and that eventually 
+will increase  the team effectiveness. On the other hand, 
+lack of team management skill negatively influences 
+teamwork productivity. It mainly refers to team design 
+choice and resource constraint. Another factor that 
+influences skillfulness is pair programming; however, this 
+factor is not encouraged in Bangladeshi software 
+companies. Management does not want to engage two 
+resources for single work due to increase in expenses. It is 
+mostly practiced by the developers when they need 
+assistance to complete a difficult work. 
+Getting the right person with suitable skills and 
+knowledge for an agile team is a difficult job for the 
+software companies in Bangladesh. Staffing (right person 
+selected) happened to be  as one of  the most important 
+factors impacting teamwork productivity, as Table I and 
+Fig. 4 show. Consequently, team design choice became a 
+significant influencing factor for agile teamwork 
+productivity (Fig. 5). It affects the amount of knowledge 
+that team members must apply to improve the team 
+effectiveness (Fig. 5). 
+VI. LIMITATIONS OF THE STUDY 
+There are a number of limitations to this study. First, this 
+study was limited to 17 respondents and 12 interviewees 
+from 17 software companies only. It was challenging to get 
+access to more software companies due to time constraint. 
+Respondents were carefully chosen from different roles 
+within the agile team in order to get different perspectives of 
+productivity in the context of Bangladesh software Industry.  
+Another limitation of this study is the agile team 
+members’ perceptions used as a response. However, with 
+survey, this study relies on what the respondents provided to 
+the researcher. It is possible that the respondents’ perception
+64Copyright (c) IARIA, 2017.     ISBN:  978-1-61208-590-6
+ICSEA 2017 : The Twelfth International Conference on Software Engineering Advances
+Team Productivity
+Motivation
++
+Team
+Management
+Reward
+Culture
+Team size
+Coordination
+Communication
+Mutual trust
+Leadership
+Goal
+Feedback
+External Factor
+WorkingEnvironment
+Resource
+constraint
+Team
+Effectiveness
+Adaptibility
+Task Variation
+Turnover
++
+++ +
++
++
+-
+Market salary
+rates
+Fair wage
+-
+unable to adjust to
+the team
+-
+Team design
+choice
+Team diversity
+Team collocation
+Full time
+allocation
++
++
++
++
+Team Morale
+Change in scope
+Skillfulness
+Training
+Learning factor
+Programming
+language
+Tools usageExternal
+dependency
+-
++
+Mutual performance
+monitoring
+Project
+Complexitiy
+Self management
+Rework
+Customer
+satisfaction
+Product backlog
+Undisovered
+rework
+Work completed
+-
+Desired workforce
+Hiring rate
+Discrepancy
+Training rate
+Experienced
+workforce
+Work quality
++
+Actual work force
++
++
+-
++
++
++
++
+Team Orientation
+Back-up behavior
++
++
++
++
++
++
++
++
++
++
++
++
++
++ +
++
++
++
++
+Pair programming
++
+Reuse
++
+Overwork
+Exhaustion+
+-
+-
+Time available
+Error geneation
+rate
++
++
++
+-
+-
++
+error detection and
+correction rate
++
++
++
+-
++
++
+Change in
+Technology
+Market condition
++
++
+CONCEPTUAL MODEL OF AGILE TEAMWORK PRODUCTIVITY
+Schedule pressure
+Estimated time to
+complete
++
++
++
++
+Organization
+growth
++
+New project
++
++
++
++
+-
+-
+-
+-
+<Turnover>
+-
++
+Figure 5.  Overall   conceptual  model of Agile   teamwork  productivity
+ 
+may change and be different after the end of the project. To 
+minimise the impact of this effect, the survey and 
+interviewees’ responses were compared for factors selection 
+to include in the model. The questionnaire used for this 
+study had been used successfully in other research [9][22] 
+and was developed after a detailed literature review. Some 
+of the questions were included in the survey after getting 
+knowledge about the working conditions of software 
+companies in Bangladesh from the interview sessions.  
+Finally, this conceptual model certainly has its 
+limitations and is not complete because it only focuses on 
+the influence factors. The multiple feedback processes and 
+delays are not incorporated in this model. 
+VII. CONCLUSION AND FUTURE WORK 
+Teamwork productivity determines the overall project 
+performance in an agile software development process. 
+Therefore, researchers have gained increasing interest in 
+studying agile teams’ productivity. Agile team members 
+should be taught to interpret and manage productivity 
+factors regularly as they are self-managed.  
+The researchers concluded that productivity 
+improvement programs would become effective only if all 
+the variables are simultaneously controlled and monitored. 
+One effective solution to improve productivity is to look 
+into the factors influencing productivity and also have a 
+dynamic strategical model that tells the project manager in 
+advance the degree of impact that these factors will have on 
+team productivity. In order to achieve that, the main factors 
+65Copyright (c) IARIA, 2017.     ISBN:  978-1-61208-590-6
+ICSEA 2017 : The Twelfth International Conference on Software Engineering Advances
+that affect teamwork productivity were determined. The 
+findings of this stage are the main influencing factors which 
+are team effectiveness, team management, motivation and 
+customer satisfaction. Lack of agile team management 
+support was found to be the most mentioned reason for 
+failed agile project. Most followed agile method was 
+SCRUM for all the respondents. Among agile practices, 
+daily stand-up meeting and continuous integration were the 
+most cited practices impacting teamwork productivity. 
+Customer satisfaction was found as main criterion for 
+measuring or perceiving productivity by the interviewees 
+and survey respondents.  
+As a future work, the soft factors are to be quantified to 
+incorporate in system dynamics model. The proposed 
+system dynamics model will provide more strategic insights 
+and understanding about the effectiveness of different 
+managerial policies based on non-straight forward cause-
+effect relationships hidden in the system. Furthermore, this 
+qualitative CLD will be used as a basis for a stock and flow 
+model development of the quantitative SD method. Further 
+research need to be conducted to validate the conceptual 
+model against a real-world agile software development 
+project. 
+ 
+REFERENCES 
+ 
+[1] A. Trendowicz and J. Münch, “Factors Influencing Software 
+Development Productivity—State?of?the?Art and Industrial 
+Experiences,” Advances in computers, vol. 77, pp. 185-241, Dec. 2009. 
+[2] C. D. O. Melo, D. S. Cruzes, F. Kon, and R. Conradi, “Interpretative 
+case studies on agile team productivity and management,” 
+Information and Software Technology, vol. 55, pp.412-427, 
+Feb.2013. 
+[3] K. Petersen, “Measuring and predicting software productivity: A 
+systematic map and review,” Information and Software Technology, 
+vol. 53, pp.317-343, Apr.2011. 
+[4] Y. Ramírez and D. Nembhard, “Measuring knowledge worker 
+productivity: A taxonomy,” Journal of Intellectual Capital, vol. 5, no. 
+4, Dec. 2004, pp. 602–628. 
+[5] C. D. O. Melo, D. S. Cruzes, F. Kon, and R. Conradi, “Agile  team 
+perceptions of productivity factors,” In Agile Conference (AGILE), 
+IEEE, 2011, pp. 57-66.  
+[6] X. Kong, L. Liu, and D. Lowe, “Modeling an agile web maintenance 
+process using system dynamics,” In 11th ANZSYS/Managing the 
+Complex V conference, ISCE Publishing, Christchurch, NZ. Dec. 
+2005. 
+[7] T.K. Abdel?Hamid and S. Madnick, “Software productivity: potential, 
+actual, and perceived,”. System Dynamics Review, 5(2), pp. 93-113, 
+June. 1989. 
+[8] J. M. Lyneis and D. N. Ford, “System dynamics applied to project 
+management: a survey, assessment, and directions for future 
+research,” System Dynamics Review, vol. 23, no. 2?3, pp. 157-189, 
+Jun. 2007. 
+[9] C.O. Melo, “Productivity of agile teams: an empirical evaluation of 
+factors and monitoring processes,” Ph.D. dissertation, Universidade 
+de São Paulo, 2015. 
+[10] T. Dingsøyr and Y. Lindsjørn, “Team performance in agile 
+development teams: findings from 18 focus groups,” International 
+Conference on Agile Software Development, Springer Berlin 
+Heidelberg, June. 2013, pp. 46-60. 
+[11] A. Teh, E. Baniassad, D. V. Rooy, and C. Boughton, “Social 
+Psychology and Software Teams: Establishing Task-
+Effective Group Norms,” IEEE Software, vol. 29, no.4, pp.53–58, Jul. 
+2012. 
+[12] B. Tessem and F. Maurer, “Job Satisfaction and Motivation in a 
+Large Agile Team,” In International Conference on Extreme 
+Programming and Agile Processes in Software Engineering, Springer 
+Heidelberg, vol. 4536, pp. 54–61., 2007. 
+[13] N. B. Moe, A. Aurum, and T. Dybå, “Challenges of shared decision 
+making: A multiple case study of agile software development,” 
+Information and Software Technology, vol. 54, pp.853–865, Aug. 
+2012. 
+[14] N. B. Moe and T. Dingsøyr, “Scrum and team effectiveness: Theory 
+and practice,” International Conference on Agile Processes and 
+Extreme Programming in Software Engineering, Springer Berlin 
+Heidelberg, Jun. 2008, pp. 11-20. 
+[15] N. B. Moe, T. Dingsøyr, and T. Dybå, “A teamwork model for 
+understanding an agile team: A case study of a Scrum project,” 
+Information and Software Technology, vol. 52, pp. 480-491, May. 
+2010. 
+[16] T. Dingsøyr and T. Dybå, “Team effectiveness in software 
+development: Human and cooperative aspects in team effectiveness 
+models and priorities for future studies,” Proceedings of the 5th 
+International Workshop on Co-operative and Human Aspects of 
+Software Engineering. IEEE Press, 2012, pp. 27-29. 
+[17] B. Barry, “Software Engineering Economics,” New York, vol. 197, 
+NY: Prentice-Hall, 1981. 
+[18] W. Scacchi, “Understanding and improving Software Productivity,” 
+Advances in Software engineering and Knowledge engineering, 2005. 
+[19] F. Nasirzadeh and P. Nojedehi, “Dynamic modelling of labour 
+productivity in construction projects,” International Journal of Project 
+Management, vol. 31, no. 6, Aug. 2013, pp. 903-911. 
+[20] A. Rodrigues and J. Bowers, “The role of system dynamics in project 
+management,” International Journal of Project Management, vol. 14, 
+no. 4, Aug. 1996, pp. 213-220. 
+[21] B. Barry, “Centre for Systems and Software Engineering,” Oct. 2012. 
+[Online]  Available 
+http://sunset.usc.edu/csse/research/COCOMOII/cocomo_main.html. 
+[retrieved: August, 2017]. 
+[22] J. M. Verner, M. A. Babar, N. Cerpa, T. Hall, and S. Beecham, 
+“Factors that motivate software engineering teams: A four country 
+empirical study,”. Journal of Systems and Software, vol. 92, June. 
+2014,  pp. 115-127. 
+[23] V. Lalsing, S. Kishnah, and P. Sameerchand, “People factors in agile 
+software development and project management,” International 
+Journal of Software Engineering & Applications, vol. 3, pp. 117, 
+Jan.2012. 
+[24] L. L. R. Rodrigues, N. Dharmaraj, and B. R. Shrinivasa Rao, “System 
+dynamics approach for change management in new product 
+development,” Management Research News, vol. 29, no. 6, Aug. 
+2006, pp. 512-523. 
+[25] M. J. Mawdesley and S. Al-Jibouri, “Modelling construction project 
+productivity using systems dynamics approach,” International Journal 
+of Productivity and Performance Management, vol. 59, no.1, Dec. 
+2009, pp. 18-36. 
+[26]  I. Fatema, “Agile teamwork productivity influence factors,” Jan. 
+2017. [Online] Available https://goo.gl/forms/I5xGdQGqFMk9he5f2. 
+[retrieved: August, 2017]. 
+ 
+ 
+ 
+ 
+ 
+ 
+66Copyright (c) IARIA, 2017.     ISBN:  978-1-61208-590-6
+ICSEA 2017 : The Twelfth International Conference on Software Engineering Advances
