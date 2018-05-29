@@ -21,7 +21,7 @@ public class FilePath {
 
 	private JFrame frmFilePathInput;
 	private JTextField textField;
-	private String pdfText;
+	private String pdfText = "";
 
 	public void showWindow() {
 		EventQueue.invokeLater(new Runnable() {
@@ -75,15 +75,17 @@ public class FilePath {
 				
 				//System.out.println(pdfText);\
 				try {
-					FileWriter fw = new FileWriter("output1.txt");
+					FileWriter fw = new FileWriter("output.txt");
 					fw.write(pdfText);
 					fw.close();
 				} catch (Exception e) {
 					// TODO: handle exception
-					System.err.println();;
+					System.err.println("Error in writting file");;
 				}
 				//InfoProcessing info = new InfoProcessing(pdfText);
-				OutputWindow aw = new OutputWindow(pdfText);
+				if(pdfText != null) {
+					OutputWindow aw = new OutputWindow(pdfText);
+				}
 				
 							
 			}

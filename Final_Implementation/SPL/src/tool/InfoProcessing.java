@@ -18,6 +18,7 @@ public class InfoProcessing {
 	private ArrayList<String> authorDetails = new ArrayList<String>();
 	public int refNum =0;
 	private int titleLineNo = 0;
+	public String[]fAuthor = null;
 	
 	
 	ArrayList<SuffixTrie> roots = new ArrayList<SuffixTrie>();
@@ -25,14 +26,15 @@ public class InfoProcessing {
 	
 	public InfoProcessing(String pdfText) {
 		this.text = pdfText;
-		tokenize();
+		//tokenize();
 		makeArrayList();
 		ProcessTitle();
 		processAuthors();
-		//getFirstAuthor();
 		countReference();
+		extractRefAuthor();
+		getKeyWords();
 	}
-	
+	//------------------------------------------------------------------
 	public void tokenize() {	
 		
 		Map< String, Integer > wm = new HashMap<String, Integer>();
@@ -58,9 +60,11 @@ public class InfoProcessing {
 			System.out.println(m.getKey() + ": " + m.getValue());
 		}
 		
+		
+		
 	}
 	
-	
+	//==============================================================
 	public boolean is_stopWord(String word) {
 		
 		try {
@@ -85,12 +89,12 @@ public class InfoProcessing {
 		}
 		return false;
 	}
-	
+	//============================================================
 	public void makeArrayList(){
 		String line = "";
 		
 		try {
-			FileReader fr = new FileReader("output1.txt");
+			FileReader fr = new FileReader("output.txt");
 			BufferedReader bReader = new BufferedReader(fr);
 			line = bReader.readLine();
 			while(line != null) {
@@ -108,6 +112,8 @@ public class InfoProcessing {
 		}
 		
 	}
+	
+	//=======================================================
 	public void ProcessTitle() {
 		boolean flag = true;
 		for(int i=0; i<lines.size(); i++) {
@@ -118,6 +124,11 @@ public class InfoProcessing {
 				String name = br.readLine();
 				while(name!=null) {
 					if(isPatternExist(name, treeRoot)) {
+						titleLineNo = i;
+						flag = false;
+						break;
+					}
+					if(name.equals(" ")) {
 						titleLineNo = i;
 						flag = false;
 						break;
@@ -137,11 +148,12 @@ public class InfoProcessing {
 	
 		
 	}
+	//====================================================
 	public ArrayList<String> getTitle() {
 		return title;
 	}
 	
-	
+	//===================================================
 	public void processAuthors() {
 		
 		int lineNo = 0;
@@ -162,11 +174,11 @@ public class InfoProcessing {
 		
 		System.out.println(authorDetails);
 	}
-	
+	//======================================================
 	public ArrayList<String> getAuthors() {
 		return authorDetails;
 	}
-	
+	//=================================================
 	public int[] countReference() {
 		
 		int size = lines.size();
@@ -174,12 +186,13 @@ public class InfoProcessing {
 		String num = "";
 		refNum = 0;
 		for (int n = size-1; n>=0; n--) {
-			if(str.toLower(lines.get(n)).equals("references") || str.toLower(lines.get(n)).equals("reference")) {
+			if(str.toLower(lines.get(n)).equals("references") || str.toLower(lines.get(n)).equals("references:")) {
 				break;
 			}
-			if(lines.get(n).equals("")) continue;
+			if(lines.get(n).equals(" ")) continue;
 			String[] word = lines.get(n).split(" ");
 			String firstWord = word[0];
+			//System.out.println(firstWord);
 			if(firstWord.charAt(0) == '[' && firstWord.charAt(str.getLength(firstWord)-1) == ']'
 					&& (firstWord.charAt(1) >= '0' && firstWord.charAt(1) <= '9')) {
 				
@@ -226,7 +239,48 @@ public class InfoProcessing {
 		}	
 		return reference;
 	}
+	//===================================================
+	public void  extractRefAuthor() {
+		fAuthor = new String[refNum];
+		int x = 0;
+		String author="";
+		int i=0;
+		while(true) {
+			if(str.toLower(lines.get(i)).equals("references")||str.toLower(lines.get(i)).equals("reference") ||
+					str.toLower(lines.get(i)).equals("references:")) {
+				break;
+			}
+			i++;
+		}
+		i++;
+		String temp = "";
+		for(int j=i; j<lines.size(); j++) {
+			String line = lines.get(j);
+			String[] word = line.split(" ");
+			String fw = word[0];
+			if(fw.charAt(0)=='[' && fw.charAt(str.getLength(fw)-1)==']' && (fw.charAt(1)>='0'&& fw.charAt(1)<='9')){
+				for(int k=1; k<word.length;k++) {
+					temp = temp+" "+word[k];
+				}
+				String []temp1  =temp.split(",");
+				temp = temp1[0];
+				temp1 = null;
+				temp1 = temp.split(" ");
+				for (String string : temp1) {
+					if(string.equals("and")) break;
+					else author = author+" "+string;
+				}
+				fAuthor[x] = author;
+				author="";
+				x++;
+				temp="";
+				
+			}
+			
+		}
+	}
 	
+	//==================================================
 	public SuffixTrie createSuffixTree(String text ) {
 		SuffixTrie root = new SuffixTrie();
 		int len = str.getLength(text);
@@ -235,7 +289,7 @@ public class InfoProcessing {
 		}
 		return root;
 	}
-	
+	//======================================================
 	public  boolean isPatternExist(String pattern, SuffixTrie r) {
 
 		LinkedList<Integer> val = r.findPattern(pattern);
@@ -243,7 +297,7 @@ public class InfoProcessing {
 		if(val == null) return false;
 		else return true;
 	}
-	
+	//========================================================
 	public int getPatternOccurance(String pattern, SuffixTrie r) {
 		LinkedList<Integer> val = r.findPattern(pattern);
 		
@@ -251,5 +305,32 @@ public class InfoProcessing {
 		else return val.size();
 	}
 	
+	public String[] getKeyWords() {
+		String [] kw = null;
+		for(int i=0; i<50; i++) {
+			String txt = lines.get(i);
+			SuffixTrie root = createSuffixTree(str.toLower(txt));
+			
+			if(isPatternExist("keywords", root) || isPatternExist("index terms", root)) {
+				if(str.toLower(txt).equals("keywords")) {
+					txt = lines.get(i+1);
+					i++;
+				}
+				for(int j=i+1;true;j++) {
+					String txt1 = lines.get(j);
+					root = null;
+					root = createSuffixTree(str.toLower(txt1));
+					if(isPatternExist("introduction", root)) {
+						break;
+					}
+					else txt = txt+"-"+txt1;
+				}
+				kw = txt.split("[^A-Za-z ]");
+				//System.out.println(kw[1]);
+				break;
+			}
+		}
+		return kw;
+	}
 	
 }

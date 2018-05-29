@@ -1,664 +1,760 @@
-FANTASIA: A Tool for Automatically Identifying Inconsistency in AngularJS MVC
-Applications
-Md Rakib Hossain Misu
+A Team Allocation Technique Ensuring Bug Assignment to Existing and New
+Developers Using Their Recency and Expertise
+Afrina Khatun
 Institute of Information Technology
 University of Dhaka
 Dhaka, Bangladesh
-email: bsse0516@iit.du.ac.bd
+Email: bit0411@iit.du.ac.bd
 Kazi Sakib
 Institute of Information Technology
 University of Dhaka
 Dhaka, Bangladesh
-email: sakib@iit.du.ac.bd
-Abstract—AngularJS is prone to inconsistency issues because
-of the abstract interactions between Document Object Model
-(DOM) and JavaScript. It creates hidden bugs, and leads the
-application to failure. It becomes acute when developers use
-custom AngularJS directives for increasing code reusability and
-maintainability. To resolve the inconsistency issues, a static code
-analysis based approach FANTASIA is proposed. FANTASIA
-first extracts Abstract Syntax Tree (AST) and DOM from the
-AngularJS application’s MVC modules including its custom
-directives. By traversing AST and DOM, next it finds the
-defined identifiers along with the associated data types of those
-identifiers. Finally, the extracted identifiers and data types are
-mapped and compared using a string matching algorithm to
-determine the consistency across the application. To evaluate
-FANTASIA, 25 open source AngularJS applications are used
-where 15 applications contain only MVC modules and rest of
-the applications contain both MVC modules and custom direc-
-tives. The experimental result shows that FANTASIA produces
-overall 97.63% recall and 100% precision to correctly detect
-inconsistency in those 15 applications similar to existing approach
-AUREBESH. Interestingly, when custom directives are present,
-FANTASIA outperforms with a significant increase of overall
-96.66% recall and 100% precision comparing to 76.97% recall
-and 100% precision of AUREBESH.
-Keywords-JavaScript; MVC; Inconsistency; Static Analy-
-sis.
+Email: sakib@iit.du.ac.bd
+Abstract—Existing techniques allocate a bug fixing team using
+only previous fixed bug reports. Therefore, these techniques may
+lead to inactive team member allocation as well as fail to include
+new developers in the suggested list. A Team Allocation approach
+for ensuring bug assignment to both Existing and New developers
+(TAEN) is proposed, which uses expertise and recent activities
+of developers. TAEN first applies Latent Dirichlet Allocation
+on previous bug reports to determine the possible bug types.
+For new developers, TAEN identifies their preferred bug type,
+and adds them to the list of other developers, grouped under
+the identified bug types. Upon the arrival of a new bug report,
+TAEN determines its type and extracts the corresponding group
+of developers. A heterogeneous network is constructed using
+previous reports to find the collaborations among the extracted
+developers. Next, for each developer, a TAEN score is computed
+combining the expertise and recency of their collaborations.
+Finally, based on the incoming report’s severity, a team of N
+members is allocated using the assigned TAEN score and current
+workloads. A case study conducted on Eclipse Java Development
+Tools (JDT), shows that TAEN outperforms K-nearest-neighbor
+Search And heterogeneous Proximity based approach (KSAP)
+by improving the team allocation recall from 52.88 up to 68.51,
+and showing the first correct developer on average at position
+1.98 in the suggested list. Besides, a lower standard deviation of
+workloads, 30.05 rather than 46.33 indicates balanced workload
+distribution by TAEN.
+Keywords—Bug Assignment; Team Allocation; Bug Report;
+Latent Dirichlet Allocation (LDA).
 I. INTRODUCTION
-AngularJS is a JavaScript-based MVC framework used for
-developing loosely coupled web applications, which are known
-as Single Page Applications (SPA) [1]. It provides developers
-the flexibility to separate business logic in several reusable
-modules and components, such as model, view, controller,
-directive, service, etc. However, AngularJS is still prone to
-inconsistency issues because of wrong interaction between
-DOM and JavaScript [2]. This wrong interaction occurs, as
-AngularJS facilitates the application development by abstract-
-ing the DOM API method call between the JavaScript and
-HTML code.
-AngularJS depends on the use of identifiers to represent
-model variable(s) (mv) and controller function(s) (cf ). To
-represent the functionality, the identifiers of mv and cf should
-be consistent in the view. Besides, in AngularJS, views consist
-of various built-in directives, such as ng-if, ng-count [3]. To
-use built-in directives, developers have to assign mv and cf to
-these directives with a defined form, such as ng-if=”{mv}”,
-along with specific data types. For example, ng-if directive
-takes boolean type of mv and cf. So, mv and cf are used in ng-
-if directive should be boolean type. Since JavaScript is loosely
-typed dynamic programming language, the developers have to
-keep in mind that, values assigned to mv and returned by cf,
-should be consistent to their expected types. Inconsistencies
-among these identifiers and the types, can potentially incur
-significant loss in the functionality and performance. The
-reason is that, the major functionalities of an application rely
-on mv and cf.
-AngularJS also supports the Do not Repeat Yourself (DRY)
-feature [4]. It allows developers to create one directive and
-reuse it anywhere within the entire application. Despite having
-a lot of built-in directives, it also encourages the developers
-to create custom directives to enhance the re-usability of the
-code. Every custom directive has some specific properties that
-define its own view, model and controller. Sometimes, it is also
-used inside a view under a specific controller by following
-a parent child relationship. While using custom directives,
-inconsistency may arise not only within its own model, view
-and controller, but also between its parent view and controller.
-Unfortunately, developers do not get exceptions and warnings
-when inconsistency issue occurs [5]. It becomes the worst
-to find inconsistencies when an application contains multiple
-models, views and controllers.
-Since the usages of AngularJS MVC framework for client-
-end application development are fairly new, there are few
-papers addressing the inconsistency issues. Two state-of the
-art works, TypeDevil [6] and AUREBESH [7] are proposed to
-detect inconsistencies in JavaScript applications. TypeDevil is
-capable of detecting inconsistency only within the JavaScript
-source codes. It performs dynamic source code analysis to
-detect data type inconsistency. On the contrary, AUREBESH
-is also able to detect inconsistencies in JavaScript MVC
-applications by performing static code analysis on both the
-JavaScript and HTML code. However, these approaches are
-not able to accurately identify inconsistencies in AngularJS
-MVC applications. The reason is that TypeDevil only dynami-
-cally analyzes the JavaScript source code instead of analyzing
-both JavaScript and HTML source code. AUREBESH only
-178Copyright (c) IARIA, 2017.     ISBN:  978-1-61208-590-6
-ICSEA 2017 : The Twelfth International Conference on Software Engineering Advances
-performs static source code analysis in MVC modules and
-never analyzes the presence of custom directives in AngularJS
-applications.
-To resolve the inconsistency issues in AngularJS MVC
-applications, a static code analysis based approach FANTASIA
-is proposed. It first extracts Abstract Syntax Tree (AST) and
-DOM by performing static code analysis among the modules,
-such as model, view, controller and custom directive including
-its associated files. Then using AST and DOM, it searches for
-the identifiers that are used to represent mv and cf. The data
-types of mv and return types of cf are also drawn by exploring
-the AST nodes and DOM elements. Finally, to determine the
-inconsistencies across application, identifiers and data types,
-extracted from model and controllers are compared to those
-identifiers and data types extracted from views.
-In order to evaluate FANTASIA, 25 open source AngularJS
-applications are used. Among these 25 applications, 15 appli-
-cations contain MVC modules and rest of the 10 applications
-contain both MVC modules and custom directives. From
-experimental result analysis, it is observed that FANTASIA
-performs accurate with overall 97.63% recall and 100% pre-
-cision to find inconsistencies in 15 applications with MVC
-modules, comparing to the existing approach AUREBESH
-[7]. When custom directives are present, FANTASIA achieves
-a significant overall 96.66% recall and 100% precision to
-identify inconsistencies in 10 AngularJS MVC applications
-that contain inconsistencies within both the MVC modules
-and custom directives.
-The remainder of this paper is structured as follows. Section
-II describes the proposed approach for inconsistency detection
-with a concise description of each step. Implementation, eval-
-uation and result analysis are discussed in Section III. Section
-IV deals with the existing techniques for fault and incon-
-sistency detection in JavaScript applications. Finally, Section
-V concludes the paper by summarizing the contribution and
-possible future direction of this work.
-II. PROPOSED APPROACH
-To resolve the inconsistency issues, a static code analysis
-based approach FANTASIA is proposed. An overview of the
-proposed approach is depicted in Figure 1 as a block diagram.
-From the block diagram, it is seen that there are 9 modules,
-such as MVC Components and Directive Identifier (MCDI),
-DOMExtractor (DMEx), DirectiveExtractor (DEx), ASTEx-
-tractor (AEx), ViewExtractor (VEx), ModelExtractor (MEx),
-ControllerExtractor (CEx), MVC Group Builder (MGB) and
-Inconsistency Detector (InD) that work collaboratively in
-several phases. TABLE I also represents the terms used for
-describing the proposed approach. The modules are depended
-on each other for taking input, providing output and giving
-feedback. A brief description of each of the modules is
-discussed in the following subsections.
-A. MVC Components and Directive Identifier (MCDI)
-MCDI module identifies and filters the MVC component
-source files (except library files) based on the file names and
-Figure 1. Block diagram of proposed approach.
-module types. It is assumed that every module is written in a
-single source file and the file name should be self descriptive
-to figure which and what type of AngularJS module it is.
-After filtering, the module makes a list of directive definition
-files and extracts the application configuration file which is
-responsible for defining the routes and the correspondent views
-and controllers related to that routes. It provides the view and
-controller file names that are related and responsible for each
-route of the application. Using this information, a Primary
-MVC Group (PMG) is made that contains a list of HTML code
-for view file and JavaScript code for controller file in a form
-of tuple <view HTML code, controller JavaScript code>.
-Further, this group is used by the DMEx and AEx module
-and the list of directive files is used by the DEx module.
-B. DOM Extractor (DMEx)
-DMEx module uses HTML code as input from PMG that is
-provided by MCDI module. It also gets HTML source code
-from the DEx module (shown in Figure 1). It is responsible for
-transforming the HTML code into its DOM representations,
-which is used for analyzing the HTML elements and attributes.
-This module provides the extracted DOM to the VEx module
-for further extracting the AngularJS built-in directives and
-elements.
-C. AST Extractor (AEx)
-Similar to DEx, AEx module gets the input from PMG. It
-also gets JavaScript code from DEx module. The responsibility
-of AEx is to transform the JavaScript code into its AST
-representation. It provides the AST to the ME and CEx
-module. Those modules analyze the AST for further extracting
-mv and cf.
-D. View Extractor (VEx)
-VEx module analyzes the DOM and produces a set of View
-(V) objects. It extracts all the identifiers of mv and cf that are
-179Copyright (c) IARIA, 2017.     ISBN:  978-1-61208-590-6
-ICSEA 2017 : The Twelfth International Conference on Software Engineering Advances
-TABLE I. LIST OF TERMS USED IN PROPOSED APPROACH
-Term Descriptions Term Descriptions
-MCDI MVC Components and
-Directive Identifier
-DMEx DOM Extractor
-AEx AST Extractor VEx View Extractor
-MEx Model Extractor CEx Controller Extractor
-DEx Directive Extractor MGB MVC Group Builder
-InD Inconsistency Detector M Model Object
-V View Object C Controller Object
-CD-M Model Object for Custom
-Directives
-CD-V View Object for Cus-
-tom Directives
-CD-C Controller Object for Cus-
-tom Directives
-PMG Primary MVC Group
-UMG Updated MVC Group CMG Complete MVC
-Group
-used in the view. Generally, mv and cf are appeared as DOM
-elements or attribute value of AngularJS built-in directives.
-The attributes of AngularJS built-in directives accept a specific
-type of value. So, the accepted type of these built-in directives
-are also analyzed. Besides, VEx finds the presence of custom
-directives that are used in the DOM and makes a list of custom
-directives.
-E. Model Extractor (MEx)
-MEx takes AST as input from AEx module. It analyzes
-the AST of controller files and produces a set of Model (M)
-objects. It finds all the mv that are defined in the controller.
-The mv which are used in the view are binded with a view
-model variable (generally it is represented by $scope or vm).
-To find the identifiers of mv, MEx looks for the left hand side
-of the assignment expression. So, the identifiers are found as
-the properties of view model variable. For getting the type
-of mv, MEx considers the right hand side of the assignment
-expression and infers the assigned type based on the AST
-node (e.g., if the right hand side is StringLiteral node than
-the inferred type is String). If the right hand expression is too
-complex, the assigned type cannot be inferred. In this case,
-the type is considered as complex for that identifier.
-F. Controller Extractor (CEx)
-Similar to MEx, CEx also receives AST from AEx module
-and analyzes the AST of controller files and generates a set of
-Controller (C) objects. It extracts the cf identifiers following
-the same way described in MEx. However, to get the assigned
-types for cf identifiers, the return type of each cf is considered.
-Finally, the modules VEx, MEx and CEx generates the sets
-of Models (M), Views (V) and Controllers (C) objects. Each
-element of the set of M, V and C is considered as a tuple of
-UMG in a form of <M,V,C> that is used by MGB module.
-G. Directive Extractor (DEx)
-DEx module gets a list of custom directive definition files
-from MCDI module. Using the definition files, it extracts
-directive type, related view and controller files that are respon-
-sible for representing the functionality of that directive. The
-view files are fed to the DMEx module to generate DOM. After
-that, DOM is similarly extracted by the VEx module to create
-a View object for that custom directive that is represented by
-CD-V. It contains a list of mv and cf identifiers and types used
-in the custom directive view. The controller file of that custom
-directive is fed to the AEx module that also generates AST.
-Next, this AST is extracted by the MEx module to produce a
-Model object for that custom directive represented by CD-M.
-The MEx extracts identifier and type of the mv. Similarly, CEx
-generates a Controller object CD-C for that custom directive.
-It extracts the identifier and return type of cf. Finally, DEx
-module builds a list of Directive objects that contains the
-related model, view and controller for each directive.
-H. MVC Group Builder (MGB)
-The module MGB receives UMG and gets a list of Directive
-objects from the module DEx. It is responsible for building
-CMG by adding some new tuple with UMG. For every element
-of UMG, each directive is analyzed from the list of Directive
-objects based on its type. At first, for each directive, an empty
-tuple of Model M, View V and Controller C object is initialized
-and the View object of the directive CD-V is assigned to it.
-The reason is that the directive has its own view and it cannot
-be inherited from the parent view. Next, for each directive
-the type of the directive is checked. The type of a directive
-is determined by its scope property. If the scope is false, it
-refers that this directive does not manipulate the cf and mv of
-its parent controller. It directly uses the cf and mv properties
-from its parent controller to its view. So, the CD-M and CD-C
-of that directive are directly assigned to the empty M and C. If
-the scope is true, it means that this directive can prototypically
-inherit and manipulate the cf and mv of its parent controller.
-So, the collection of mv and cf used in both directive and its
-parent controller are assigned to the M and C, respectively.
-When the scope is isolated, it means that the mv and cf of
-this directive are isolated from its parent controller. For such,
-the directive’s CD-M and CD-C are assigned to the empty M
-and and C, respectively. Finally, new tuple of <M,V,C> are
-added to the UMG to form the CMG.
-I. Inconsistency Detector (InD)
-The module InD gets CMG from MGB and provides a list
-of inconsistency. It mainly compares all the mv and cf among
-the Model, Controller and View object of each tuple of CMG.
-It is performed to identify the potential inconsistencies that
-exist within each tuple. At first, it searches the inconsistencies
-related to mv by iterating every mv that is used in the view and
-controller. For all such mvs that are defined in the controller,
-their identifiers are checked to see whether these also exists
-and are defined to the corresponding view. The checking is
-done based on string comparison. If it does not exist it means
-either these mv are not used in the view or their identifiers are
-inconsistent. So, there exists an identifier inconsistency and it
-is included in the inconsistency list. However, if mv exists, next
-the data type of the mv is checked into the view and controller.
-If the data type of the mv is dissimilar, corresponding to
-the view and controller, it means that a type inconsistency is
-present that is also included in the inconsistency list. Following
-the same process, inconsistencies in the cf are identified. It is
-180Copyright (c) IARIA, 2017.     ISBN:  978-1-61208-590-6
-ICSEA 2017 : The Twelfth International Conference on Software Engineering Advances
-assumed that mv and cf with unknown and complex types are
-matched with all types.
-III. EVALUATION
-This section deals with the evaluation of proposed approach.
-A brief description of each aspect of evaluation is described
-in the following subsection.
-A. Implementation
-Since Command Line Interface (CLI) tools are getting
-popular for client-end application development, FANTASIA
-[8] is implemented in the form of a CLI using JavaScript
-programming language on top of Node.js framework. It is
-available as an open source Node.js package that can eas-
-ily be installed using Node.js package manager (nmp). For
-identifying inconsistencies, developers have to run a command
-called find-incons in the application’s base directory using the
-command prompt. For each identified inconsistency, an error
-message is shown containing the inconsistency type, file name
-and the location of the code where the inconsistencies are
-occurred. Tool demonstration of FANTASIA is available in
-[8].
-B. Experimental Dataset
-In total, 25 AngularJS MVC applications are used. These
-are chosen from a list of MVC applications mentioned in
-AngularJS Git-Hub page [9]. The applications that were
-chosen here were also used to evaluate the existing approach
-AUREBESH. Based on the presence of inconsistencies in the
-custom directives, these applications are categorized into two
-classes. Among the 25 applications, 15 applications containing
-MVC modules are categorized as Class A and rest of the 10
-applications containing both MVC modules along with custom
-directives are categorized as Class B.
-C. Fault Injection Study
-Similar to AUREBESH [7], the efficiency of FANTASIA
-was measured by performing a fault injection study on the
-experimental dataset. The injection was performed by ini-
-tializing mutations in the applications. The mutations were
-initialized in a way so that these could create inconsistencies
-in those applications. Inconsistencies within the applications
-depend on consistency properties. According to Frolin et al.
-[7], JavaScript MVC applications are inconsistent if the appli-
-cations do not satisfy one of the following four consistency
-properties.
-1) The controller and view can only use mv that are defined
-in the model.
-2) The view only uses cf that are defined in the controller.
-3) The expected types of corresponding mv in the view
-match the assigned types in the model or controller.
-4) The expected and returned types of corresponding cf
-match in the view and controller.
-Based on the consistency properties, Frolin et al. introduced
-10 types of mutations [7]. The description of each mutation
-type is represented in TABLE III. Among these types, every
-mutation type corresponds to a violation of the above 4
-consistency properties. In this experiment, these 10 types of
-mutations (mentioned in TABLE III) were also used. At first,
-the mutations were injected into the source code of those
-applications. After that, FANTASIA was run on the mutated
-version of the applications and analyzed whether FANTASIA
-could identify the inconsistencies initialized by the mutations.
-If the inconsistencies were identified, the result of the injection
-was noted as successful, otherwise failed. Finally, the numbers
-of successful and failed detections were counted for measuring
-precision and recall. For comparative analysis, AUREBESH
-was also run on the mutated applications and counted the
-number of successful and failed detections.
-The results of identifying mutation type represent how
-well FANTASIA can detect the violation of corresponding
-consistency properties. For this study, at least 4 injections were
-performed per mutation type that amounts 30 to 40 injections
-in each application. It was noted that some mutation types
-were not applicable for all applications. For example, it is
-not mandatory that all controllers use the model variables.
-For these types of specific case, some mutation types were
-not considered. As a result, there were less than 40 injections
-injected in some applications. The location of the mutated code
-was chosen arbitrarily only if that line of code was applicable
-for current mutation type.
-D. Result
-After running both FANTASIA and AURBESH on the
-mutated version of Class A dataset, recall and precision are
-calculated based on successful and failed detection. TABLE
-II shows the fault injection study results over the Class
-A dataset where TI refers to total injection, SD refers to
-successful detection and FD refers to failed detection. As
-TABLE II shows, FANTASIA is very accurate yielding to
-an overall recall of 97.63% with 100% precision and gets
-perfect recall in 11 out of 15 applications. From TABLE
-II, it is also observed that existing approach AUREBESH
-also performs accurately with an overall recall of 97.20%
-with 100% precision and gets perfect recall in 11 out of 15
-applications. So, both FANTASIA and AUREBESH perform
-similarly for identifying inconsistencies in those applications
-which contain inconsistencies only in MVC modules and not
-in custom directives.
-Again FANTASIA and AUREBESH both were run on
-mutated version of Class B dataset to calculate the recall and
-precision. TABLE IV shows the fault injection study results
-over the Class B dataset. Here, FANTASIA also performs ac-
-curately with an overall recall of 96.66% with 100% precision
-and gets perfect recall in 5 out of 10 applications. However,
-AUREBESH does not perform well with an overall recall of
-76.97% and 100% precision with no perfect recall. The reason
-for AUREBESH’s poor performances is that it never analyzes
-the presence of custom directives in those applications. So,
-it was unable to identify those inconsistencies which were
-occurred within the custom directives. On the other hand,
-FANTASIA analyzes the presence of custom directives and
-181Copyright (c) IARIA, 2017.     ISBN:  978-1-61208-590-6
-ICSEA 2017 : The Twelfth International Conference on Software Engineering Advances
-TABLE II. COMPARATIVE RESULT BETWEEN FANTASIA AND AUREBESH ON CLASS A DATASET
-Applications Application Category Size (LOC) TI FANTASIA AUREBESH
-SD FD Recall(%) Precision(%) SD FD Recall(%) Precision(%)
-Angular Tunes Music Player 185 35 35 0 100.00 100.00 35 0 100.00 100.00
-Balance Projector Finance Tracker 511 40 34 6 85.00 100.00 33 7 82.05 100.00
-Cafe Townsend Employee Tracker 452 40 40 0 100.00 100.00 40 0 100.00 100.00
-Cryptography Encoder 523 40 40 0 100.00 100.00 40 0 100.00 100.00
-Dematerializer Blogging 379 40 36 4 90.00 100.00 37 3 92.05 100.00
-Dustr Template Compiler 493 40 40 0 100.00 100.00 40 0 100.00 100.00
-ETuneBook Music Manager 5042 40 40 0 100.00 100.00 40 0 100.00 100.00
-Flat Todo Todo Organizer 255 40 40 0 100.00 100.00 40 0 100.00 100.00
-GQB Graph Traversal 1170 40 38 2 95.00 100.00 37 3 92.05 100.00
-Hackynote Slide Maker 236 40 40 0 100.00 100.00 40 0 100.00 100.00
-Kodigon Encoder 948 40 40 0 100.00 100.00 40 0 100.00 100.00
-Memory Games Puzzle 181 37 35 2 94.59 100.00 34 3 91.89 100.00
-Shortkeys Shortcut Maker 407 40 40 0 100.00 100.00 40 0 100.00 100.00
-Sliding Puzzle Puzzle 608 34 34 0 100.00 100.00 34 0 100.00 100.00
-TwitterSearch Search 357 40 40 0 100.00 100.00 40 0 100.00 100.00
-Overall 11747 626 612 14 97.63 100.00 610 16 97.20 100.00
-TABLE III. TYPES OF INJECTED FAULTS
-No Description Property
-1 Change the name of a mv used in line N of a view 1
-2 Change the name of a mv used in line N of a
-controller
-1
-3 For a particular mv used in line N of a view, remove
-the declaration of that mv in a corresponding model
-1
-4 For a particular mv used in line N of a controller,
-remove the declaration of that mv in a corresponding
-model
-1
-5 Change the name of a cf used in line N of a view 2
-6 For a particular cf used in line N of a view, remove
-the declaration of that cf in a corresponding con-
-troller
-2
-7 For a particular mv used in the view that expects a
-certain type T1, change the declaration of that mv in
-line N of a corresponding model so that the type is
-changed to T2
-3
-8 For a particular mv used in the view that expects
-a certain type T1 and declared in line N of a
-corresponding model, change the expected type to
-T2 by mutating the ng attribute name
-3
-9 For a particular cf used in the view that expects a
-certain type T1, change the return value of that cf in
-line N of the controller to a value of type T2
-4
-10 For a particular cf used in the view that expects a
-certain type T1 and returns a value in line N of a
-corresponding controller, change the expected type
-to T2 by mutating the ng attribute name
-4
-able to identify the inconsistencies that are occurred within
-the custom directives.
-From TABLE II and TABLE IV, it is observed that both
-FANTASIA and AURBESH attain 100% precision. The reason
-is that there is no occurrence of getting false positive results for
-successful and failed inconsistency identification. As, it is the
-assumption that all applications are developed by following
-proper coding convention, it prevents both approaches from
-getting false positive results.
-IV. RELATED WORK
-Inconsistency occurs in JavaScript applications because of
-wrong interaction between DOM and JavaScript code. As a
-result, DOM-related faults and errors are partially responsible
-for inconsistency issues. However, AngularJS has gradually
-been developed over the last couple of years. Therefore, it
-is considered to be a new area of research. A few works
-have been found that directly discusses inconsistency issues
-in AngularJS MVC applications. Among those works, several
-studies [2][5][10][11] rigorously discuss DOM-related faults
-and errors that occur in JavaScript applications. Moreover,
-two recent studies [6][7] have addressed the inconsistency
-issues in JavaScript application development. So, considering
-all of those works, the knowledge domain is classified in
-two categories, such as DOM Related Fault in JavaScript
-and Inconsistency in JavaScript. A brief description of each
-category is mentioned in the following subsections.
-A. DOM Related Fault in JavaScript
-Since AngularJS MVC framework contains both HTML
-DOM and JavaScripts, DOM related errors and faults are
-directly responsible for inconsistency issues. Several studies
-have been conducted to analyze the behavior of DOM in
-JavaScript applications, such as Forlin et al. performed an
-empirical study [10] for identifying numerous errors and
-faults in JavaScript based web applications. Both static and
-dynamic source code analysis are performed in this study that
-has identified different characteristics of JavaScripts faults.
-Further, these characteristics of JavaScript faults are used
-by Ocaizer et al. [11] to identify errors and faults during
-JavaScript application development. They proposed an auto-
-matic fault localization approach AUTOFLOX by analyzing
-the JavaScript fault characteristics. By performing dynamic
-backward program slicing, AUTOFLOX can localize faults
-within the JavaScript based web applications. Besides, the
-evaluation result of AUTOFLOX shows that about 79% of
-reported JavaScript errors and faults are DOM related [11].
-On the other hand, based on those results, Forlin et al. [2]
-observed that almost 65% of JavaScript faults are DOM related
-faults that occur because of the wrong interaction of JavaScript
-code and DOM element using incorrect identifier. However,
-in development phase, these located faults are needed to be
-resolved. In order to resolve these faults, an automatic fault
-repairing technique VEJOVIS was proposed by Forlin et al.
-[5]. This technique includes the combination of both static
-and dynamic code analysis with backward program slicing.
-The outcome of this technique is the categorization of some
-182Copyright (c) IARIA, 2017.     ISBN:  978-1-61208-590-6
-ICSEA 2017 : The Twelfth International Conference on Software Engineering Advances
-TABLE IV. COMPARATIVE RESULT BETWEEN FANTASIA AND AUREBESH ON CLASS B DATASET
-Applications Application Category Size (LOC) TI FANTASIA AUREBESH
-SD FD Recall(%) Precision(%) SD FD Recall(%) Precision(%)
-Angular Qize Quiz Maker 523 36 36 0 100.00 100.00 30 6 83.33 100.00
-Angular Table Component 327 35 35 0 100.00 100.00 30 5 85.71 100.00
-Angular Ui-Grid Component 243 35 35 0 100.00 100.00 26 9 74.78 100.00
-C3-Chart Librery 763 35 35 0 100.00 100.00 27 8 77.14 100.00
-Color Chooser Component 134 30 30 0 100.00 100.00 23 7 76.66 100.00
-Date Picker Component 278 40 37 3 92.20 100.00 30 10 75.00 100.00
-Directives Lab Directive Example 412 40 39 1 97.50 100.00 31 9 77.50 100.00
-GemStore2 Game 453 40 38 2 95.00 100.00 28 12 70.00 100.00
-Responsive Slider UI Design 359 37 33 4 89.18 100.00 25 12 67.56 100.00
-Text Editor Editor 192 40 37 3 92.50 100.00 33 7 82.50 100.00
-Overall 3684 368 355 13 96.66 100.00 283 85 76.97 100.00
-common types of faults. However, FANTASIA completely
-differs from these works, as in these works non-MVC applica-
-tions and frameworks are considered. These applications have
-various architectural patterns compared to AngularJS MVC
-framework. So, these works are not compatible to resolve
-inconsistency issues in AngularJS MVC applications.
-B. Inconsistency in JavaScript
-Since, JavaScript is a dynamic programming language, it
-does not provide compile-time warning if a program contains
-identifier or data type inconsistencies [11]. Both of these
-inconsistencies are responsible of creating hidden bugs and
-failures. However, in a survey study, it is found that among
-460 developers, 39% of those consider that silent failures
-caused by identifier or type inconsistencies, are real prob-
-lems during application development [12]. For identifying
-type inconsistencies, Michael et al. proposed an approach
-called TypeDevil [6] that can detect type inconsistencies by
-performing dynamic analysis on JavaScript code. To evaluate
-the approach, TypeDevil [6] was applied on JavaScript code
-collected from various applications. The evaluation shows that
-it can detect type consistency within the JavaScript files.
-In order to detect inconsistency, an approach AUREBESH
-[7] was proposed that can detect both the type and identifier
-consistencies by performing static code analysis in JavaScript
-MVC applications. To evaluate AUREBESH, a fault injection
-study was conducted on 20 open source AngularJS applica-
-tions considering to be representative of MVC applications.
-The result of this study shows that AUREBESH can detect
-inconsistencies and some real world bugs in those applications.
-However, TypeDevil [6] cannot find inconsistency in Angu-
-larJS MVC applications since to find type and identifier incon-
-sistencies in MVC applications, both the controller JavaScript
-and view HTML code should be analyzed. TypeDevil [6]
-does not analyze the inconsistencies between the HTML and
-JavaScript code rather it only analyzes the JavaScript code.
-FANTASIA resolves this problem by performing static analy-
-sis on both HTML and JavaScript code instead of performing
-dynamic analysis only within JavaScript code. On the other
-hand, while using custom directives in AngularJS applications,
-AUREBESH [7] cannot detect inconsistencies because it does
-not analyze the presence of custom directives. FANTASIA
-also differs from AUREBESH as it considers the presence of
-custom directives across the applications and identifies those
-inconsistencies that occur within the custom directives and
-MVC modules.
-V. CONCLUSION AND FUTURE WORK
-The presence of inconsistencies (e.g., identifier and type in-
-consistency) in AngularJS applications produces hidden bugs,
-which reduce the maintainability and readability of code.
-During development, it is hard to identify inconsistencies
-since JavaScript does not provide compile time warn if any
-inconsistency occurs. Detecting inconsistency becomes more
-difficult when developers use custom directives with MVC
-modules. However, existing approach can only identify incon-
-sistencies that occur in MVC modules omitting the presence
-of custom directives. To resolve this issue, FANTASIA is
-proposed that performs static code analysis across the applica-
-tion and analyzed the presence of custom directives to detect
-inconsistencies.
-According to the result analysis, FANTASIA achieves an
-overall 97.63% recall and 100% precision similar to existing
-approach AUREBESH, to detect inconsistency in 15 applica-
-tions that contain inconsistency in MVC modules. Comparing
-to AUREBESH, it outperforms with an overall 96.66% recall
-and 100% precision to detect inconsistency in 10 applications
-containing inconsistency both in MVC modules and custom
-directives. The reason for FANTASIA’s significant increase of
-recall is analysis the presence of custom directives.
-Incorporating FANTASIA with the existing tool AU-
-REBESH, to detect inconsistency in other JavaScript MVC
-frameworks (e.g., Ember.js), can be a future research scope.
-As FANTASIA is only applicable to the primary version of
-AngularJS framework, the future work is to make FANTASIA
-compatible to the latest versions of AngularJS. Future scope
-also includes to make FANTASIA compatible for TypeScript
-or CoffeScript based MVC applications. Currently, the scope
-of this proposed technique is to identify inconsistency only in
-AngularJS MVC applications developed in JavaScript. How-
-ever, in future this approach can be further used to automati-
-cally remove and fix inconsistency in MVC applications.
+With the increasing size of software systems, bug assign-
+ment has become a crucial task for software quality assurance.
+For example studies reveal that, near the release dates, about
+200 bugs were reported daily for Eclipse [1]. As developers
+generally work in parallel, this turns bug resolution into a
+collaborative task as well. It is reported that Eclipse bug reports
+involve on average a team of 10 developers contributions.
+However, due to large number of bug reports, manually
+identifying developer collaboration is error-prone and time-
+consuming. Besides, industrial projects have reported the need
+for collaborative task assignments to utilize both existing and
+new developers [2]. It is common that new developers join
+the company or project during software development. Random
+bug report assignment to new developers always results in
+unnecessary bug reassignments, and increases the time needed
+for the bug to be fixed. In this context, an automatic approach
+can facilitate bug assignment by allocating teams utilizing both
+existing and new developers.
+In order to assign newly arrived bugs to appropriate de-
+velopers, available information sources such as bug reports,
+source code and commit logs are analysed. Recent commits
+generally exhibit developer’s recent activities and previous
+bug report represent their expertise on fixing particular types
+of bugs. Team assignment is generally done by analysing
+previously fixed bug reports, which can help to recommend
+experienced developers. With the passage of time, developers
+may switch projects or company, therefore inactive members
+may be recommended. On the other hand, developers who
+joined recently, do not own any fixed bug reports or commits.
+So, the approaches which learn from these information sources,
+fail to assign tasks to new developers. Existing developers
+get overloaded with a queue of bug reports, whereas new
+developers are ignored in the allocation procedure. This leads
+not only to prolonged bug fixing time, but also to improper
+workload distribution.
+Understanding the importance of bug assignment, various
+techniques have been proposed in the literature. BugFixer,
+a developer allocation method has been proposed by Hao
+et. al [3]. This method constructs a Developer-Component-
+Bug (DCB) network using past bug reports, and recommends
+developers over the network. This allocated list becomes less
+accurate with the joining of new developers. Baysal et al. have
+proposed a bug triaging technique using the user preference of
+fixing certain bugs [4]. The technique combines developer’s
+expertise and preference score for ultimate suggestion. How-
+ever, this technique also considers only historical activities.
+Afrina et. al [5] have proposed an Expertise and Recency based
+Bug Assignment (ERBA) approach that considers both fixed
+reports and commit history for recommendation. This tech-
+nique is applicable for single developer recommendation, and
+it cannot allocate tasks to new developers. A team assignment
+approach using K-nearest-neighbor Search And heterogeneous
+Proximity (KSAP) has been proposed by Zhang et al. [6]. It
+creates a heterogeneous network from the past bug reports, and
+assigns a team based on their collaboration over the network.
+The main limitation of this technique is that it over-prioritizes
+previous activities.
+A Team Allocation technique for ensuring bug assignment
+to both Existing and New developers (TAEN), using expertise
+and recency of developers has been proposed. TAEN allocates
+a team in five steps. The Bug Solving Preference Elicitation
+step takes bug reports, and applies Latent Dirichlet Allocation
+(LDA) model on these reports to determine the possible
+types of bug reports. For new developers, TAEN first elicits
+their bug solving preference by presenting them with main
+representative terms of each bug type, and groups them under
+the corresponding type. The New Bug Report Processing step
+96Copyright (c) IARIA, 2017.     ISBN:  978-1-61208-553-1
+SOFTENG 2017 : The Third International Conference on Advances and Trends in Software Engineering
+extracts the summary, description and severity of incoming
+reports, and determines their bug types to identify the potential
+fixer group. Next, the Developer Collaboration Extraction step
+generates a heterogeneous network using attributes (four types
+of nodes and eight types of edges) extracted from previous
+bug reports, and finds collaborations among the identified
+fixer group members over the network. The Expertise and
+Recency Combination step then assigns a TAEN score to
+each developer by combining the number and recency of their
+extracted collaboration. Finally, based on the severity of the
+incoming report, the Team Allocation step suggests a team of N
+developers using the TAEN score and current workloads. After
+each reported bug is fixed, this step also updates developers
+contribution status.
+A case study on an open source project, Eclipse Java
+Development Tools (JDT) has been conducted for assessment
+of TAEN. To evaluate compatibility, TAEN has been compared
+with an existing technique, KSAP [6]. A total of 2500 fixed
+and 676 open bug reports have been taken under consideration
+[7]. A test set of 250 fixed and 30 open bug reports have been
+applied on both techniques. The results showed that TAEN
+improved the recall of the allocated team from 52.88 up to
+68.51. A decrease in the average position of the first correct
+developer from 3.1 to 1.98 indicates the increased effectiveness
+of TAEN. Besides, a lower standard deviation (30.05 instead
+of 46.33) of developer workloads shows more balanced task
+distribution by TAEN.
+The remainder of the paper is organized as follows. Section
+II describes the existing efforts in the field of automated bug
+assignment. Section III presents the overall team allocation
+procedure of TAEN by discussing the detailed processing of
+each step. Section IV shows a case study on Eclipse JDT
+while applying TAEN. Lastly, Section V concludes the paper
+by summarizing its contribution and possible future directions.
+II. RELATED WORK
+Due to the increased importance of automatic bug assign-
+ment, a number of techniques have been proposed. A survey
+on various bug triaging techniques has been presented by
+Sawant et. al [8]. The survey divided bug triaging techniques
+into text categorization, reassignment, cost aware and source
+based techniques etc. Studies focusing on industrial needs of
+bug assignment have also been proposed in literature [2], [9].
+Significant related works are outlined in this section.
+Text categorization based techniques build a model that
+trains from past bug reports to predict the correct rank of devel-
+opers [1], [3], [4], [10], [11]. Baysal et al. have enhanced these
+techniques by adding user preference in the recommendation
+process [4]. The framework performs its task using three com-
+ponents. The Expertise Recommendation component creates a
+ranked developer list using previous expertise profiles. The
+Preference Elicitation component collects and stores a rating
+score regarding the preference level of fixing certain bugs
+through a feedback process. Lastly, knowing the preference
+and expertise of each developer, the Task Allocation component
+assigns bug reports. The applicability of this technique depends
+on user ratings, which can be inconsistent. Besides, for rec-
+ommendation the technique does not take new developers into
+account. As a result, imbalanced workload distribution among
+developers may occur.
+Reassignment based techniques have also been developed
+by researchers [12], [13], [14]. The main focus of these
+techniques is to reduce the number of passes a bug report
+goes through due to incorrect assignment. In such techniques,
+a graph is constructed using previous bug reports [13], [14].
+As mentioned above, consideration of these past activities fail
+to accommodate the new developers in final recommendation.
+A fine grained incremental learning and multi feature tossing
+graph based technique has been proposed by Bhattacharya et.
+al [12]. It is an improvement over previous techniques because
+it considers multiple bug report features, such as product and
+component, when constructing the graph. Because it considers
+previous information, the technique results in search failure in
+case of new developers arrival.
+CosTriage, a cost aware developer ranking algorithm has
+been developed by Park et. al [15]. The technique converts
+bug triaging into an optimization problem of accuracy and cost,
+which adopts Content Boosted Collaborative Filtering (CBCF)
+for ranking developers. As the input to the system is only
+previous bug history, the technique contains no clue regarding
+new developers to assign tasks.
+Source based bug assignment techniques have also been
+proposed. Matter et. al have suggested DEVELECT, a vo-
+cabulary based expertise model for recommending developers
+[11]. The model parses the source code and version history to
+index a bag of words representing the vocabulary of source
+code contributors. For new bug reports, the model checks the
+report keywords against developer vocabularies using lexical
+similarities. The highest scored developers are taken as fixers.
+Another source based technique has been proposed in [16].
+The technique first parses all the source code entities (such
+as name of class, attributes, methods and method parameters)
+and connects these entities with contributors to construct a
+corpus. In case of new bug reports, the keywords are searched
+in the index and given a weight based on frequent usage and
+time metadata. The main limitation of these techniques is, it
+suggests novice developers without considering their experi-
+ence and preference. As these techniques require minimum
+one source commits, these also fail to include new developers
+in final suggestion.
+Vaclav et al. have presented a study to compare the trend
+of bug assignment in the open source and industrial fields
+[2]. The study applies Chi-Square and t-test for evaluating the
+variability of those two fields dataset, and reports identical
+trends in terms of distribution. Most importantly, it concludes
+with some findings highlighting the need for balanced task
+assignment to individuals and team recommendation. Zhang et
+al. developed a team assignment technique called KSAP [6]. It
+initially constructs a heterogeneous network using existing bug
+reports. When a new bug report arrives, the technique applies
+cosine similarity between the document vectors of new and
+existing bug reports, and extracts the K nearest similar bug
+reports. Next, the commenters of these K similar bugs are
+taken as the candidate list. Finally, the technique computes a
+proximity score for each developer based on their collaboration
+on the network. The top scored Q number of developers
+are recommended as fixer team. Although this technique can
+meet the need of team recommendation, it fails to cover the
+97Copyright (c) IARIA, 2017.     ISBN:  978-1-61208-553-1
+SOFTENG 2017 : The Third International Conference on Advances and Trends in Software Engineering
+requirement of balanced task distribution due to ignoring new
+developers in the assignment process.
+Various techniques for automatic bug fixer suggestion have
+been proposed in the literature. Most of the techniques learn
+from previous fix or source history of software repositories.
+Consideration of only one of these information sources leads
+to inactive or inexperienced developer recommendation. Again,
+both of the sources lack information regarding the newly joined
+developers. As a result, all of these techniques fail to delegate
+tasks to newly joined developers resulting in unequal workload
+distribution.
+III. METHODOLOGY
+In order to allocate teams by ensuring task allocation to
+both existing and new developers, a technique called TAEN is
+proposed. Most of the existing techniques learn from previous
+fixed reports for recommending expert developers. Due to ig-
+noring recent activities, these approaches may suggest inactive
+developers. Using only expertise information cannot satisfy
+the required information provided by the source contributions.
+Both information sources need to be considered to allocate
+expert and recent group of developers. Therefore, an expert
+and recent team allocator capable of allocating tasks to both
+existing and new developers is required. TAEN allocates a
+team in five steps which are described below.
+A. Bug Solving Preference Elicitation of New Developers
+As bug tracking and version control systems do not contain
+any record regarding the activities of new developers, existing
+approaches fail to recommend new developers. In this case,
+bugs are assigned randomly to these developers regardless
+of their abilities and preferences in solving the bugs, which
+always results in reassignment and prolonged fixing time. This
+step determines the bug solving preference of new developers
+in two phases - Developer Group Creation and Preference
+Elicitation.
+1) Developer Group Creation: This phase groups devel-
+opers based on the types of bugs they have worked on. In
+this context, first, the possible types of bugs needs to be
+determined. Therefore, this step takes bug reports as input
+in Extensible Markup Language (XML) format. A bug report
+generally contains a number of attributes such as id, status,
+resolution, fixer, commenter, severity, summary, description,
+activity history etc. For training and evaluation purpose, the
+bug reports which have resolved and verified as status, and
+fixed as resolution property are taken into consideration. Be-
+sides, in order to determine developers current workloads, the
+bug reports which have bug status either of new, reopened and
+started are collected.
+Next, the summary and description property of each report
+are extracted and processed to represent its vocabulary. The
+processing steps are discussed in Subsection III-C. For iden-
+tifying the type of bug reports, LDA modeling is used. Given
+a list of documents having mixtures of (latent) topics, LDA
+tends to determine the most relevant topic of the document.
+So, the bug reports are represented as documents, and fed into
+the LDA model to be divided into n types. At the end, the
+LDA model determines the most relevant type for each bug
+report. Each bug type is represented with the probabilities of
+each word to be in the type.
+Once all the bug reports are labeled with one of the n
+types, the developers who have worked on similar types of
+bugs are grouped together. Hence, the algorithm in Figure 1 is
+proposed for creating developer groups. The GroupDevelopers
+procedure of Figure 1 takes the processed bug reports as input.
+This procedure keeps the grouped developers in a complex data
+structure called bugTypes, as shown in line 2. The outer map of
+bugTypes links each type to developers who have contributed
+to that specific type of bugs. The inner map connects each
+developers name to their contribution frequency on that type
+of bugs.
+A for loop is defined at line 4 for iterating on the inputted
+bug reports. Each iteration of the loop first extracts the bug
+report’s type determined by the LDA model. This task is done
+by calling a method, GetBugType, as shown in line 5. The
+method takes the summary and description of the report, and
+returns its type. The GroupDevelopers procedure also extracts
+and stores the contributor’s name of each bug report in a Set
+of strings named contributors. Here, the contributors refers to
+the reporter and fixers of the bug report.
+1: procedure GROUPDEVELOPERS(List < BugReport >
+BugReports)
+2: Map<String,Map<String, Integer> > bugTypes
+3: Map<String, Integer> developers, String type
+4: for each b ? BugReports do
+5: type? GETBUGTYPE(b.summary, b.description)
+6: Set < String > contributors? b.contributors
+7: developers ? bugTypes.get(type)
+8: if developers == null then
+9: developers? new Map<String, Integer>()
+10: for each c ? contributors do
+11: developers.put(c, 1)
+12: bugTypes.put(type, developers)
+13: else
+14: for each c ? contributors do
+15: if devlopers.contains(c) then
+16: developers.replace(c, developers[c]+1)
+17: else
+18: developers.put(c, 1)
+19: bugTypes.replace(type, developers)
+Figure 1: The Algorithm of Developer Group Creation
+Next, the procedure gets the list of developers mapped
+against the identified bug type (line 7). If no developers are
+yet mapped against this type, a new instance of inner map
+named developers is initialized (line 8-9). All the contributors
+are then populated into the developers map which links each
+developer to their initial contribution frequency (line 10-11).
+This developers map is then put against the identified bug type
+(line 12). On the other hand, if a list of developers is already
+mapped against the identified type, another for loop is declared
+for updating the developers list (line 14). The loop then checks
+whether the developers list already contains the contributors
+and updates the contribution frequency of each contributor,
+c (line 15-18). Finally, the procedure updates the outer map
+bugType with the changed developers list (line 19).
+98Copyright (c) IARIA, 2017.     ISBN:  978-1-61208-553-1
+SOFTENG 2017 : The Third International Conference on Advances and Trends in Software Engineering
+2) Preference Elicitation: This step focuses to elicit the
+bug solving preference of new developers for ensuring their
+inclusion in the allocated team. When a new developer arrives,
+the list of most representative words of each bug type is
+offered to the developer. The chosen bug types are initially
+considered as the types of bugs the developer can contribute
+to. So, the developer is then grouped with the developers who
+have worked on similar bugs determined by the previous step.
+B. New Bug Report Processing
+On arrival of a new bug report B, the type of the report
+needs to be identified for extracting the developer group
+to which it can be assigned. The summary, description and
+severity properties of the report are extracted and processed.
+As these property values generally contain irrelevant and noisy
+terms, pre-processing is done. The processing step includes
+identifier decomposition based on CamelCase letter and sep-
+arator character, number and special character removal, stop
+word removal and stemming. A score for each bug type is
+computed using (1) similar to [15], as follows-
+typeScore(i) =
+?
+?w?B
+(Probabilityi(w) ?Distributioni(w)) (1)
+where, i represents the i-th type in the LDA model, w
+represents each word in B, Probabilityi(w) is the probability
+of w in the i-th bug type, and the distribution of w in the
+new bug report is indicated by Distributioni(w). Finally, the
+bug type which gets the highest score having most similar
+vocabulary with the new bug report, is determined as the type
+of the new bug report. Thus, the developer’s group associated
+with the determined bug type is selected. The top-K members
+of this group, who have higher contributions are considered
+as the developers from which a bug fixing team needs to be
+allocated.
+C. Developer Collaboration Extraction
+It is mentioned above that bug resolution is a collabo-
+rative task. To allocate a team, the collaboration among the
+developers needs to be considered. So, this step extracts the
+collaboration among the developers of the identified group.
+A heterogeneous directed network is constructed from the
+previous fixed bug reports [6]. The four types of nodes include
+- Bug (B), Developer (D), Component (C) and Comment (T).
+The eight types of possible relations among these nodes are
+listed in Table I. For example, Type 1 relationship connects a
+D node to a B node depicting the developer (D) has worked on
+the bug report (B). The term work refers assignment, report,
+reassignment, reopening, fixing, verifying or tossing event of
+a bug. Similarly, Type 4 and Type 5 relations denote that a
+comment (T) is contained by a bug (B), and a developer (D)
+has written the comment (T), respectively.Developer collaboration can be identified by factors such as
+how frequently two developers contribute to the same bugs and
+components of the system. Keeping these factors in mind, six
+types of paths similar to [6] are extracted from the network
+each of which connects two developers using combinations
+of the above relation edges. The paths are listed in Table II.
+For example - ’D-B-T-D’ represents that a developer (D) has
+worked on a bug (B), which has a comment (T) written by
+another developer (D). Similarly, ’D-B-C-B-D’ depicts that
+TABLE I. EIGHT TYPES OF RELATIONSHIPS AMONG NODES
+Type No. Specification
+1 D works on B
+2 B is worked on by D
+3 B contains T
+4 T is contained by B
+5 D writes T
+6 T is written by D
+7 B contains in C
+8 C is contained by B
+TABLE II. SIX TYPES OF DEVELOPER COLLABORATION
+Path Type Collaboration on Path
+1 Same Bug D-B-D
+2 Same Bug D-B-T-D
+3 Same Bug D-T-B-T-D
+4 Same Component D-B-C-B-D
+5 Same Component D-B-C-B-T-D
+6 Same Component D-T-B-C-B-T-D
+depicts that a developer (D) has worked on a bug (B) of a
+component (C), having another bug (B), which was worked
+on by another developer (D).
+D. Expertise and Recency Combination
+As mentioned before, ignorance of recent activities may
+result in inactive developer assignment. So, this step adds re-
+cency information with the extracted developer’s collaboration.
+The more recent developers work or comment on a bug, the
+higher the priority of that developer. For combining the recent
+activities, the time when the developers collaborate on the
+bug, is considered. The algorithm in Figure 2 is proposed to
+compute a score called TAEN score for each developer, by
+combining the expertise and recency of collaboration.
+The CalculateScore procedure of Figure 2 takes a complex
+data structure, named devInfos as input. This data structure
+maps the developers to their identified collaboration informa-
+tion of type DeveloperCollaboration.
+1: procedure CALCULATESCORE(Map < String,
+DeveloperCollaboration > devInfos)
+2: Map < String,Double > devScores
+3: for each d ? devInfos do
+4: for each path ? d.sameBugs do
+5: ADDSCORE(path.firstEdge,
+BugReport.date)
+6: ADDSCORE(path.lastEdge,
+BugReport.date)
+7: procedure ADDSCORE(Edge e, Date date)
+8: if e.srcNode = D then
+9: dev ? e.srcNode
+10: else
+11: dev ? e.destNode
+12: if !devScores.keys.contains(dev) then
+13: devScores? 1/(date? e.Date)
+14: else
+15: devScores+? 1/(date? e.Date)
+Figure 2: The Algorithm of Expertise and Recency Combination
+99Copyright (c) IARIA, 2017.     ISBN:  978-1-61208-553-1
+SOFTENG 2017 : The Third International Conference on Advances and Trends in Software Engineering
+Each instance of DeveloperCollaboration contains two
+properties - sameBugs and sameComponents. The former
+property contains a list of paths which depicts the associated
+developers collaboration on same bugs. Similarly, the later
+one represents developers collaboration on same components.
+The CalculateScore procedure represents the partial score
+calculation process based on the same bugs only. A similar
+approach is also used for calculating the collaboration score
+of same components. The procedure starts with defining a data
+structure called, devScores which connects the developers to
+their calculated TAEN score (line 2). An outer for loop is
+defined for iterating on each developer and an inner loop is
+defined for iterating on their collaborated paths (line 3-4).
+Each collaboration path generally connects two developers.
+Therefore, for each collaborated path the score of the two
+developers needs to be added or updated (line 5,6). To perform
+this task, another procedure, AddScore is declared (line 7).
+This procedure takes an edge and a date as input. It is seen
+from Table I that developers directly collaborate by working
+or commenting on bugs. So, the collaboration edge is sent as
+parameter for the AddScore function. Besides, for adding the
+recency information of these activities, the collaboration date
+is also sent to this function. It first extracts the developer node
+from the inputted edge (line 8-11). It then checks whether the
+developer has a TAEN score already assigned (line 12). Based
+on this checking, it adds or updates the score (line 13-15).
+The score for each collaboration path is initially considered
+as 1. However, this score is divided by the date difference
+between the reporting date of the new bug report (date) and
+the collaboration date of the developer (e.date). The smaller
+the difference, the more recent the developer collaborated on
+the bug, thus the higher the score the developer gets. Lines 13-
+15 ensure the effect of recency information on the developer’s
+TAEN score.
+E. Team Allocation
+Finally, for allocating a team consisting of N developers
+where N<K, the technique first checks the severity property
+of the newly arrived bug report. The severity property refers
+to how severe the bug is, or whether it is an enhancement
+request. If the severity value is any of blocker, critical and
+major [7], the reported bug is considered as one that needs to
+be handled by existing developers. So, TAEN considers only
+the top-K contributors and sorts the developers based on their
+TAEN score. The top scored N developers are allocated as the
+fixer team.
+If the severity value contains normal, minor, trivial or
+enhancement [7], it can be handled by new developers. In
+this case, TAEN considers the new developers along with the
+top-K, and counts their current workload (assigned bugs). The
+N developers with least workload are included in the team.
+This step ensures bug assignment to new developers based
+on their bug solving preference. If two developers have the
+same workloads, the tie is resolved using the TAEN score.
+When a bug report is fixed by a developer, this contribution is
+updated in the groups of Subsection III-A. This update ensures
+incremental contribution enhancement of developers as well as
+their participation in bug resolution.
+IV. CASE STUDY
+For initial assessment of compatibility, TAEN was applied
+on an open source project, Eclipse JDT [17]. This project was
+chosen because this has been used for evaluation in various
+related approaches [15]. Secondly, the bug repository of JDT
+is available in open source. A total of 2500 fixed bug reports
+between years 2009 and 2015, and 676 open bug reports
+between 2015 and 2016 have been collected for experimental
+analysis of TAEN.
+As stated before, TAEN first takes system bug reports in
+XML format [7]. The summary and description properties are
+collected from the <short_desc> and <thetext> tags respec-
+tively. It then applies LDA on the properties to determine the
+most relevant type of each bug report. Various techniques are
+available in the literature for identifying the natural number of
+topics when applying LDA [15]. The case study divides the
+bug reports into n=17 distinct types, as 17 has already been
+used as number of topics in Eclipse [15]. The contributors,
+severity, reporting time, activity properties are also extracted
+from different XML tags in a similar manner. The contributors
+are then grouped against the corresponding bug types identified
+by LDA.
+Now, on arrival of new developers, they are presented
+with the most representative words of each bug type. Table
+III shows a few top most representative words of bug Type-
+2 and 11. The table depicts that the representative keywords
+give an idea about the corresponding type. For example, the
+enlisted keywords against Type-2 indicates User Interface (UI)
+related terms as well as bugs. If a developer selects Type-2,
+the developer is added to the group of developers associated
+with Type-2 bugs.
+TABLE III. FEW TOP REPRESENTATIVE WORDS OF BUG TYPE-2 AND 11
+Type 2 Click Editor Select Display Dialog Event
+Type 11 Mozilla Agent Gecko Build User Windows
+For comparative analysis, TAEN is compared with a team
+assignment approach, KSAP [5]. A randomly selected test
+dataset containing 250 fixed and 30 open bug reports have been
+used for checking the allocation validity. The experimental
+analysis allocates a team of N developers, where N is set to
+10. The reason behind setting N to 10 is that it is reported that
+Eclipse bug reports include on average 10 developers contribu-
+tions [6]. Besides, for ensuring validation consistency between
+KSAP and TAEN, K=50 top most contributors are taken from
+both techniques for processing of Developer Collaboration
+Extraction step.
+The compatibility of TAEN is evaluated using the follow-
+ing metrics - recall, effectiveness and workload distribution.
+Recall@N refers to whether the top N allocated developers
+contain the actual developers who fixed the report. The higher
+number of actual developers included in the top N places, the
+more correct the allocation is. The recall is calculated using
+(2) similar to [6] -
+Recall@N =
+|{dev1, dev2, ..., devN} ? {GroundTruth}|
+|GroundTruth|
+(2)
+Here, {dev1,dev2,...,devN} is the set of N allocated developers,
+and {GroundTruth} refers to the set of actual fixers containing
+100Copyright (c) IARIA, 2017.     ISBN:  978-1-61208-553-1
+SOFTENG 2017 : The Third International Conference on Advances and Trends in Software Engineering
+the reporter, fixer and commenters. Table IV illustrates the
+average Recall@10 achieved by TAEN and KSAP. TAEN had
+a higher average recall (68.51) than KSAP. Consideration of
+both recent and previous activities enabled TAEN to improve
+the recall from 52.88 to 68.51.
+TABLE IV. COMPARISON OF AVERAGE TEAM ALLOCATION RECALL@10
+Approaches Average Recall@10
+KSAP 52.88
+TAEN 68.51
+Effectiveness refers to the position of the first GroundTruth
+developer in the allocated list. Not all the members of a team
+generally play similar roles in an assigned task. Therefore, the
+ranking in the suggested team plays a vital role in determining
+task division. Approaches that allocate relevant developers at
+the top of the list are considered more effective. A lower value
+of this metric indicates higher effectiveness of the allocated
+list. The values in Table V shows allocation effectiveness of
+TAEN and KSAP. They also show the percentage of suggesting
+the first relevant developer at Position 1 to 3. In 66.36% cases
+TAEN shows the first revelant developer at Position 1 whereas
+KSAP shows that in only 2.73% cases. The consideration of
+recent activities enables TAEN to prioritize active developers
+at top of the list. The percentage of Position 2 and 3 for TAEN
+is less than KSAP because, TAEN covers most of the cases at
+Position 1. The last column shows TAEN shows the relevant
+developers on average near position 1.98 which is lower than
+KSAP (3.1).
+TABLE V. COMPARISON OF AVERAGE EFFECTIVENESS
+Approaches Average No. of Cases (%) Average
+EffectivenessPosition 1 Position 2 Position 3
+KSAP 66.36 7.27 10.91 1.98
+TAEN 2.73 57.27 11.82 3.1
+In order to validate the task assignment to new developers,
+current workload among the developers are counted from open
+bug reports of 2016. The developers who do not have any past
+history, i.e. they are not grouped under any of the bug types
+are considered as new developers in the experimentation. The
+bug solving preference of these new developers is determined
+by the type of bugs they are currently assigned to. Based on
+this preference, these developers are initially grouped with one
+of the bug types. The 30 above mentioned open bug reports
+are analyzed on both KSAP and TAEN. A partial view of
+workload distribution among developers preferring bug Type-
+15 is shown in Figure 3. The bars of Figure 3 clearly show that
+KSAP assigns no tasks to the 6 new developers plotted at the
+right end of the graph. However, TAEN successfully allocates
+the new developers based on their preference.
+For better understanding the variability of task assignment,
+standard deviation of the workloads is calculated. Standard
+deviation of a dataset depicts the variability of the data from
+their mean point. A lower value of this metric represents less
+variability i.e. equal workload distribution among developers.
+The average standard deviation of workloads assigned by
+the two techniques are enlisted in Table VI. TAEN has a
+Figure 3: Workload Distribution of KSAP and TAEN
+lower standard deviation of 30.05 than KSAP (46.33). The
+preference based inclusion of new developers in the assignment
+process, enabled TAEN to achieve lower standard deviation.
+This significant decrease in the value of standard deviation
+represents higher consistency of resource utilization by TAEN.
+TABLE VI. COMPARISON OF VARIABILITY IN WORKLOAD DISTRIBUTION
+Approaches Average Standard Deviation
+KSAP 46.33
+TAEN 30.05
+V. CONCLUSION
+Team allocation is generally done from previous fixed
+reports. Due to ignoring recent activities, these approaches
+may allocate inactive fixers. Both previous reports and recent
+commits do not contain any information regarding the newly
+joined developers. Not considering new developers in the
+final allocation leads to improper workload distribution. To
+overcome these limitations, TAEN is proposed, which assigns
+bugs to both existing and new developers combining the
+expertise and recency information.
+The Bug Solving Preference Elicitation step first deter-
+mines new developer’s choice of fixing certain types of bugs,
+and adds them to the group of developers of the chosen type.
+The New Bug Report Processing step identifies the type of
+the incoming reports to extract the corresponding grouped
+developers. Next, the Developer Collaboration Extraction step
+generates a heterogeneous network from the previous reports
+to find the collaboration of the extracted developers over
+the network. The Expertise and Recency Combination step
+then assigns a TAEN score to each developer based on their
+collaboration expertise and recency. After checking the severity
+of incoming reports, the Team Allocation step allocates a fixer
+team by using TAEN score and current workloads.
+For performing a case study on Eclipse JDT, 2500 fixed and
+676 open bug reports were collected. A test set of 250 fixed and
+30 open bug reports were used for comparison with an existing
+technique, KSAP. The result shows that TAEN improves recall
+from 52.88 to 68.51, and achieves increased effectiveness by
+identifying the correct bug fixer near position 1.98. The results
+also depict a significant decrease of standard deviation from
+101Copyright (c) IARIA, 2017.     ISBN:  978-1-61208-553-1
+SOFTENG 2017 : The Third International Conference on Advances and Trends in Software Engineering
+46.33 to 30.05 which indicates equal workload distribution. In
+future, bug reports which are not previously handled by any
+developers should be observed to check TAEN’s performance.
+ACKNOWLEDGMENT
+This work is supported by the fellowship from ICT Divi-
+sion, Bangladesh. No - 56.00.0000.028.33.065.16 (Part-1)-772
+Date 21-06-2016.
 REFERENCES
-[1] V. Balasubramanee, C. Wimalasena, R. Singh, and M. Pierce, “Twitter
-bootstrap and angularjs: Frontend frameworks to expedite science gate-
-way development,” in 2013 IEEE International Conference on Cluster
-Computing (CLUSTER). IEEE, 2013, pp. 1–1.
-183Copyright (c) IARIA, 2017.     ISBN:  978-1-61208-590-6
-ICSEA 2017 : The Twelfth International Conference on Software Engineering Advances
-[2] F. Ocariza, K. Bajaj, K. Pattabiraman, and A. Mesbah, “An empirical
-study of client-side javascript bugs,” in 2013 ACM/IEEE International
-Symposium on Empirical Software Engineering and Measurement.
-IEEE, 2013, pp. 55–64.
-[3] Angular, “Ng-if directive,” https://docs.angularjs.org/api/ng/directive/
-ngIf, 2017, [Online], [Accessed 2017-06-15].
-[4] AngularJS, “AngularJS.org,” https://angularjs.org/, 2017, [Online], [Ac-
-cessed 2017-06-15].
-[5] F. S. Ocariza Jr, K. Pattabiraman, and A. Mesbah, “Vejovis: suggesting
-fixes for javascript faults,” in Proceedings of the 36th International
-Conference on Software Engineering. ACM, 2014, pp. 837–847.
-[6] M. Pradel, P. Schuh, and K. Sen, “Typedevil: Dynamic type inconsis-
-tency analysis for javascript,” in 2015 IEEE/ACM 37th IEEE Interna-
-tional Conference on Software Engineering, vol. 1. IEEE, 2015, pp.
-314–324.
-[7] F. S. Ocariza Jr, K. Pattabiraman, and A. Mesbah, “Detecting incon-
-sistencies in javascript mvc applications,” in Proceedings of the 37th
-International Conference on Software Engineering-Volume 1. IEEE
-Press, 2015, pp. 325–335.
-[8] FANTASIA, “FANTASIA,” https://www.npmjs.com/package/
-fantasia-inconsistency-detector, 2017, [Online], [Accessed 2017-
-06-15].
-[9] GitHub, “GitHub/AngularJS,” https://github.com/angular/angular.js,
-2017, [Online], [Accessed 2017-06-15].
-[10] F. S. Ocariza Jr, K. Pattabiraman, and B. Zorn, “Javascript errors in the
-wild: An empirical study,” in Software Reliability Engineering (ISSRE),
-2011 IEEE 22nd International Symposium on. IEEE, 2011, pp. 100–
-109.
-[11] F. S. Ocariza Jr, K. Pattabiraman, and A. Mesbah, “Autoflox: An
-automatic fault localizer for client-side javascript,” in 2012 IEEE Fifth
-International Conference on Software Testing, Verification and Valida-
-tion. IEEE, 2012, pp. 31–40.
-[12] M. Ramos, M. T. Valente, R. Terra, and G. Santos, “Angularjs in the
-wild: a survey with 460 developers,” arXiv preprint arXiv:1608.02012,
-2016.
-184Copyright (c) IARIA, 2017.     ISBN:  978-1-61208-590-6
-ICSEA 2017 : The Twelfth International Conference on Software Engineering Advances
+[1] S. Banitaan and M. Alenezi, “Tram: An approach for assigning bug
+reports using their metadata,” in Proceedings of the 3rd International
+Conference on Communications and Information Technology (ICCIT),
+June 19–21, 2013, Beirut, Lebanon. IEEE, 2013, pp. 215–219,
+URL: http://info.psu.edu.sa/psu/cis/malenezi/pdfs/TRAM.pdf [accessed:
+2016-10-30].
+[2] V. Dedík and B. Rossi, “Automated bug triaging in an industrial
+context,” in Proceedings of the 42th Euromicro Conference on
+Software Engineering and Advanced Applications (SEAA), August
+31–September 2, 2016, Limassol, Cyprus. IEEE, 2016, pp. 363–367,
+URL: https://www.researchgate.net/profile/Bruno_Rossi2/publication/
+308417176_Automated_Bug_Triaging_in_an_Industrial_Context/links/
+57e3e3df08ae8d5908c1617b.pdf [accessed: 2016-12-01].
+[3] H. Hu, H. Zhang, J. Xuan, and W. Sun, “Effective bug triage based on
+historical bug-fix information,” in Proceedings of the 25th International
+Symposium on Software Reliability Engineering (ISSRE), October 23–
+26, 2014, Toulouse, France. IEEE, 2014, pp. 122–132, URL: https:
+//hal.inria.fr/hal-01087444/document [accessed: 2016-05-20].
+[4] O. Baysal, M. W. Godfrey, and R. Cohen, “A bug you like: A
+framework for automated assignment of bugs,” in Proceedings of the
+17th International Conference on Program Comprehension (ICPC),
+May 17–19, 2009, British Columbia, Canada. IEEE, 2009, pp.
+297–298, URL: http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.
+1.1.143.7283&rep=rep1&type=pdf [accessed: 2016-10-29].
+[5] A. Khatun and K. Sakib, “A bug assignment technique based on bug
+fixing expertise and source commit recency of developers,” in Proceed-
+ings of the 19th International Conference on Computer and Informa-
+tion Technology (ICCIT), December 18–20, 2016, Dhaka, Bangladesh.
+IEEE, 2016, pp. 592–597, URL: http://sci-hub.cc/10.1109/iccitechn.
+2016.7860265 [accessed: 2017-03-05].
+[6] W. Zhang, S. Wang, and Q. Wang, “Ksap: An approach to bug report
+assignment using knn search and heterogeneous proximity,” Information
+and Software Technology, vol. 70, pp. 68–84, 2016, ISSN: 0950-5849.
+[7] “Afrina/TREN,” Jan. 2017, URL: https://github.com/Afrina/TREN/
+blob/master/TeamAssignMSTestProject/Data/TeamData/bug_data_
+2009_2015.xml [accessed: 2017-01-10].
+[8] V. B. Sawant and N. V. Alone, “A survey on various techniques for bug
+triage,” International Research Journal of Engineering and Technology,
+vol. 2, pp. 917–920, 2015, ISSN: 2395-0056.
+[9] R. V. Sangle and R. D. Gawali, “Auto bug triage a need of software
+industry,” International Journal of Engineering Science, vol. 6, pp.
+8668–8670, 2016, ISSN: 2321-3361.
+[10] M. Linares-Vásquez, K. Hossen, H. Dang, H. Kagdi, M. Gethers, and
+D. Poshyvanyk, “Triaging incoming change requests: Bug or commit
+history, or code authorship?” in Proceedings of the 28th International
+Conference on Software Maintenance (ICSM), September 23–30, 2012,
+Trento, Italy. IEEE, 2012, pp. 451–460, URL: http://www.cs.wm.
+edu/~mlinarev/pubs/ICSM’12-DevRecAuthorship.pdf [accessed: 2016-
+10-20].
+[11] D. Matter, A. Kuhn, and O. Nierstrasz, “Assigning bug reports using a
+vocabulary-based expertise model of developers,” in Proceedings of the
+6th International Working Conference on Mining Software Repositories
+(MSR), May 16-17, 2009, Vancouver, Canada. IEEE, 2009, pp. 131–
+140, URL: http://flosshub.org/system/files/131AssigningBugReports.pdf
+[accessed: 2016-02-26].
+[12] P. Bhattacharya and I. Neamtiu, “Fine-grained incremental learning and
+multi-feature tossing graphs to improve bug triaging,” in Proceedings
+of the 26th International Conference on Software Maintenance (ICSM),
+September 12–18, 2010, Timisoara, Romania. IEEE, 2010, pp. 1–
+10, URL: http://www.cs.ucr.edu/~pamelab/icsm10bhattacharya.pdf [ac-
+cessed: 2016-02-26].
+[13] G. Jeong, S. Kim, and T. Zimmermann, “Improving bug triage with bug
+tossing graphs,” in Proceedings of the 7th joint meeting of the European
+software engineering conference and the ACM SIGSOFT symposium on
+The foundations of software engineering (ESEC/FSE), August 24–28,
+2009, Amsterdam, Netherlands. ACM, 2009, pp. 111–120, URL: http://
+143.89.40.4/~hunkim/images/6/65/Papers_jeong2009fse.pdf [accessed:
+2016-05-30].
+[14] L. Chen, X. Wang, and C. Liu, “An approach to improving bug
+assignment with bug tossing graphs and bug similarities,” Journal of
+Software, vol. 6, pp. 421–427, 2011, ISSN: 1796-217X.
+[15] J.-W. Park, M.-W. Lee, J. Kim, S.-W. Hwang, and S. Kim, “Cost-aware
+triage ranking algorithms for bug reporting systems,” Knowledge and
+Information Systems, vol. 48, pp. 679âA?S?–705, 2015, ISSN: 0219-3116.
+[16] R. Shokripour, J. Anvik, Z. M. Kasirun, and S. Zamani, “A time-based
+approach to automatic bug report assignment,” Journal of Systems and
+Software, vol. 102, pp. 109–122, 2015, ISSN: 0164-1212.
+[17] “JDT Core Component - Eclipse,” Jan. 2017, URL: https://eclipse.org/
+jdt/core/ [accessed: 2017-01-10].
+102Copyright (c) IARIA, 2017.     ISBN:  978-1-61208-553-1
+SOFTENG 2017 : The Third International Conference on Advances and Trends in Software Engineering

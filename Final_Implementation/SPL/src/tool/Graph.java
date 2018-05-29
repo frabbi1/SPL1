@@ -29,13 +29,13 @@ public class Graph extends JPanel{
 		
 		
 		
-		System.out.println(item);
-		double angle = 3.1416/(item/2);
+		//System.out.println(item);
+		double angle = (3.1416/item)*2;
 		double a = angle;
 		for(int i=0; i<item; i++) {
 			int y = (int)(300*Math.sin(a));
 			int x = (int)(300*Math.cos(a));
-			System.out.println(x +" " +y);
+			//System.out.println(x +" " +y);
 			BasicStroke bs = new BasicStroke(3+array[i]);
 			g2D.setStroke(bs);
 			g.setColor(Color.BLUE);

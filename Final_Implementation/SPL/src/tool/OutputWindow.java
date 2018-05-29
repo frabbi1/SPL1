@@ -49,7 +49,43 @@ public class OutputWindow extends InfoProcessing{
 		panel1.add(author);
 		
 		
-		JButton abs = new JButton("Abstract");
+		JButton abs = new JButton("Reference First Author");
+		abs.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int n=0;
+				JFrame kframe = new JFrame("Reference First Author");
+				JPanel pan =new JPanel();
+				
+				kframe.setBounds(20,20,500,700);
+				pan.setBounds(20,20,500,700);
+				pan.setBackground(new Color(0, 102, 102));
+				pan.setLayout(null);
+				
+				int gap=0;
+				for (String entity : fAuthor) {
+					
+					JLabel lbl = new JLabel(entity);
+					lbl.setFont(new Font("Tahoma", Font.BOLD, 16));
+					lbl.setBounds(6, gap, 680, 20);
+					gap+=25;
+					lbl.setForeground(Color.WHITE);
+					pan.add(lbl);
+				}
+				
+				JButton back = new JButton("BACK");
+				back.setBounds(400,600,80,50);
+				pan.add(back);
+				
+				back.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent arg0) {
+						kframe.setVisible(false);
+						mainFrame.setVisible(true);
+					}
+				});
+				kframe.getContentPane().add(pan);
+				kframe.setVisible(true);
+			}
+		});
 		abs.setForeground(new Color(0, 0, 0));
 		abs.setBounds(142,147,400,30);
 		abs.setBackground(new Color(220, 220, 220));
@@ -57,6 +93,54 @@ public class OutputWindow extends InfoProcessing{
 		panel1.add(abs);
 		
 		JButton keyW = new JButton("Key Words");
+		keyW.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				JFrame kframe = new JFrame("KeyWords");
+				JPanel pan =new JPanel();
+				
+				kframe.setBounds(20,20,500,500);
+				pan.setBounds(20,20,500,500);
+				pan.setBackground(new Color(0, 102, 102));
+				pan.setLayout(null);
+				String[] kwArray = getKeyWords();
+				if(kwArray == null) {
+					JLabel lbl = new JLabel("No key word mentioned");
+					lbl.setFont(new Font("Tahoma", Font.BOLD, 16));
+					lbl.setBounds(6, 0, 680, 20);
+					lbl.setForeground(Color.WHITE);
+					pan.add(lbl);
+					kframe.setVisible(true);
+					mainFrame.setVisible(false);
+				}
+				else {
+					int gap=0;
+					for (String entity : kwArray) {
+						
+						JLabel lbl = new JLabel(entity);
+						lbl.setFont(new Font("Tahoma", Font.BOLD, 16));
+						lbl.setBounds(6, gap, 680, 20);
+						gap+=25;
+						lbl.setForeground(Color.WHITE);
+						pan.add(lbl);
+					}
+					
+					mainFrame.setVisible(false);
+				}
+				JButton back = new JButton("BACK");
+				back.setBounds(300,300,80,50);
+				pan.add(back);
+				
+				back.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent arg0) {
+						kframe.setVisible(false);
+						mainFrame.setVisible(true);
+					}
+				});
+				kframe.getContentPane().add(pan);
+				kframe.setVisible(true);
+				
+			}
+		});
 		keyW.setForeground(new Color(0, 0, 0));
 		keyW.setBounds(142,188,400,30);
 		keyW.setBackground(new Color(220, 220, 220));
@@ -64,7 +148,7 @@ public class OutputWindow extends InfoProcessing{
 		panel1.add(keyW);
 		
 		
-		JButton ref = new JButton("REFERENCE");
+		JButton ref = new JButton("Reference Occurence");
 		ref.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JFrame frm = new JFrame("Reference");
@@ -87,9 +171,9 @@ public class OutputWindow extends InfoProcessing{
 				
 				JPanel pan = new JPanel();
 				frameTitle.setTitle("Title of the Paper");
-				frameTitle.setBounds(100,50,700,200);
+				frameTitle.setBounds(100,50,700,300);
 				frameTitle.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-				pan.setBounds(0,0,693,200);
+				pan.setBounds(0,0,693,300);
 				pan.setBackground(new Color(0, 102, 102));
 				pan.setLayout(null);
 				
@@ -105,7 +189,7 @@ public class OutputWindow extends InfoProcessing{
 					pan.add(lbl);
 				}
 				JButton back = new JButton("BACK");
-				back.setBounds(300,100,80,50);
+				back.setBounds(600,200,80,50);
 				pan.add(back);
 				mainFrame.setVisible(false);
 				back.addActionListener(new ActionListener() {
